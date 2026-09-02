@@ -4,7 +4,7 @@
   <img src="docs/assets/wa-chem-logo.png" alt="WA Chem logo" width="180">
 </p>
 
-**WA Chem** 专注做好一件事：把画二维化学结构做到像 ChemDraw 一样快速、顺手。它是一个轻量的本地工作台，开箱即用、数据留在本地，并可与 WA-DD 配体资产管理联动。
+**WA Chem** 专注做好一件事：把画二维化学结构做到像 ChemDraw 一样快速、顺手。它是一个轻量的本地工作台，开箱即用、数据留在本地，并可接入 [WA-DD](https://wa-dd.fuluwa.top) 进行配体结构编辑管理。
 
 ![WA Chem 编辑器](docs/assets/editor-mac.jpg)
 
@@ -26,7 +26,7 @@
 ### 数据与联动
 
 - 独立账号体系与访客临时使用，文档按用户隔离存储；
-- 连接 WA-DD 后可将当前分子新建为配体资产、追加到现有资产或替换其中分子；支持同一 Docker 网络自动发现或手动输入地址；
+- 连接 [WA-DD](https://wa-dd.fuluwa.top) 后可将当前分子新建为配体资产、追加到现有资产或替换其中分子；支持同一 Docker 网络自动发现或手动输入地址；
 - 完整的导入导出：Molfile、SDF、SMILES、CDXML（ChemDraw 交换格式）导入与导出，SVG / PNG 图像导出，自有 `.wachem` 文档格式完整保留编辑状态；导入自动识别格式。
 
 ## 获取与使用
