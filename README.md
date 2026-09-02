@@ -4,7 +4,7 @@
   <img src="docs/assets/wa-chem-logo.png" alt="WA Chem logo" width="180">
 </p>
 
-**WA Chem** 是一个面向化学结构绘制与识别的本地工作台：既能像 ChemDraw 一样快速绘制二维结构，也能把论文截图、照片和手绘结构识别为可编辑的分子，并可与 WA-DD 配体资产管理联动。
+**WA Chem** 专注做好一件事：把画二维化学结构做到像 ChemDraw 一样快速、顺手。它是一个轻量的本地工作台，开箱即用、数据留在本地，并可与 WA-DD 配体资产管理联动。
 
 ![WA Chem 编辑器](docs/assets/editor-mac.jpg)
 
@@ -18,9 +18,9 @@
 - ChemDraw 风格键鼠交互：拖拽画键自动吸附标准键长与 30° 网格、`+` / `-` 调整形式电荷、双击选中整个片段、Option-拖拽复制、空格平移、滚轮缩放、撤销重做与快捷键；
 - 结构清理一键重排，ACS 1996 与 WA 两套显示风格。
 
-### 结构识别（OCSR）
+### 结构识别（OCSR，规划中）
 
-- 上传图片、粘贴截图或在画布中框选区域进行识别，结果转换为可编辑的原子与键；
+- 计划支持上传图片、粘贴截图或在画布中框选区域进行识别，结果转换为可编辑的原子与键；
 - 识别结果带置信度，低置信度对象高亮显示，可在原图叠加下逐项快速纠错。
 
 ### 数据与联动
@@ -53,7 +53,15 @@
 | 浏览器 | 服务器版 Web 应用 |
 | iPad | 规划中 |
 
-两端共享同一份编辑器核心，绘制与识别能力保持一致。
+两端共享同一份编辑器核心，绘制能力保持一致。
+
+## 技术栈
+
+- **共享编辑器核心**（`apps/web/src/core`）：TypeScript 编写、零 DOM 依赖的纯逻辑模块，承载文档模型、化学规则、场景图元与全部格式解析导出——Molfile V2000、SDF、SMILES（常用子集）、CDXML（子集）、SVG 均为自研实现，不依赖 RDKit 等化学信息学库。同一份代码产出两个构建：Web 端 ESM（Vite）、Mac 端 IIFE（esbuild），由无头契约测试保证两端行为一致。
+- **Web 应用**（`apps/web`）：React 19 + TypeScript + Vite，SVG 渲染画布；自研 `EditorCore` 外部 store 经 `useSyncExternalStore` 接入 React，草稿用 IndexedDB 本地持久化；Vitest 测试。
+- **Mac 原生应用**（`apps/macos-native`）：Swift 6（macOS 13+），SwiftUI 界面 + Metal 画布（MSAA 4x、场景图元 CPU 细分 + 顶点着色器相机变换、文字纹理图集）+ CoreGraphics 导出与降级绘制；共享核心经进程内 JavaScriptCore 调用；文档存储使用 SQLite3 C API，WA-DD 凭据保存在钥匙串。零第三方依赖。
+- **服务器端**（`services/api`）：Python 3.11+ / FastAPI + Uvicorn + Pydantic，SQLite（WAL）存储用户与文档，PBKDF2 口令散列、Fernet 加密 WA-DD 令牌；Docker Compose 一体部署，nginx 托管 Web 静态文件并反代 `/api`。
+- **OCSR 识别**：规划采用 MolParser-Mobile（服务器 PyTorch、Mac Core ML 双产物）；部署侧的模型目录挂载与配置项已就位，推理服务尚未落地。
 
 ## 文档
 
