@@ -23,7 +23,7 @@ python3 -m http.server 4173
 
 应用商店入口在 macOS 和 iPadOS 版本正式上架前保持“即将上架”状态。
 
-跨仓库发布需要在 `huluxiaohuowa/wa-chem` 的 Actions secrets 中配置 `WACHEM_WEB_RELEASE_TOKEN`。该 Secret 应使用只授权 `huluxiaohuowa/wachem-web`、仅具有 `Contents: Read and write` 权限的 fine-grained personal access token。
+跨仓库发布需要在源项目仓库的 Actions secrets 中配置 `WACHEM_WEB_RELEASE_TOKEN`。该 Secret 应使用只授权 `huluxiaohuowa/wachem-web`、仅具有 `Contents: Read and write` 权限的 fine-grained personal access token。
 
 如需手工补发，发布包仍放在本仓库的 GitHub Releases，不提交到 Pages 分支：
 
