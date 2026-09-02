@@ -1,0 +1,27 @@
+{
+  "name": "WA Chem",
+  "short_name": "WA Chem",
+  "description": "WA Chem molecular editor",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#087f83",
+  "background_color": "#f6f8fb",
+  "icons": [
+    {
+      "src": "/wa-chem-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": {
+        "application/vnd.fuluwa.wa-chem": [".wachem"],
+        "application/json": [".wachem"]
+      }
+    }
+  ]
+}
