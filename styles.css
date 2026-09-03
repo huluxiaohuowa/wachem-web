@@ -24,7 +24,7 @@ svg { display: block; }
 .skip-link { position: fixed; left: 16px; top: -60px; z-index: 20; padding: 10px 14px; background: var(--ink); color: var(--white); transition: top 160ms ease; }
 .skip-link:focus { top: 16px; }
 
-.site-header, footer, .hero, .product-strip, .interface-section, .advantage-section, .release-section { width: min(calc(100% - (var(--gutter) * 2)), var(--max)); margin-inline: auto; }
+.site-header, footer, .hero, .product-strip, .interface-section, .advantage-section, .platform-section, .release-section { width: min(calc(100% - (var(--gutter) * 2)), var(--max)); margin-inline: auto; }
 .site-header, footer { display: flex; align-items: center; justify-content: space-between; }
 .site-header { min-height: 96px; }
 .brand { display: inline-flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 760; letter-spacing: -0.04em; }
@@ -84,6 +84,21 @@ h1 { margin: 0; max-width: 650px; font-size: clamp(58px, 5.25vw, 84px); line-hei
 .advantage-grid p { margin: 0; color: #b8c7d8; font-size: 14px; line-height: 1.72; }
 .advantage-grid a { color: var(--white); text-decoration: underline; text-decoration-color: #72adff; text-underline-offset: 4px; }
 .advantage-grid a:hover { color: #72adff; }
+
+.platform-section { margin-top: var(--section-space); padding: 88px 90px; display: grid; grid-template-columns: minmax(420px, 1fr) minmax(360px, 0.72fr); align-items: center; gap: 96px; background: var(--blue-pale); }
+.platform-copy > span { display: block; margin-bottom: 24px; color: var(--blue); font-size: 11px; font-weight: 780; letter-spacing: 0.16em; text-transform: uppercase; }
+.platform-copy h2 { max-width: 620px; margin: 0; font-size: clamp(42px, 4.2vw, 62px); line-height: 1.08; letter-spacing: -0.055em; }
+.platform-copy > p { max-width: 620px; margin: 28px 0 0; color: var(--ink-soft); font-size: 17px; line-height: 1.82; }
+.compute-paths { margin-top: 44px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid #b9cce2; }
+.compute-paths article { min-width: 0; padding: 28px 28px 0 0; }
+.compute-paths article + article { padding-left: 28px; border-left: 1px solid #b9cce2; }
+.compute-paths span { display: block; color: var(--blue); font-size: 11px; font-weight: 780; letter-spacing: 0.13em; text-transform: uppercase; }
+.compute-paths strong { display: block; margin-top: 15px; font-size: 20px; letter-spacing: -0.025em; }
+.compute-paths p { margin: 11px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+.platform-preview { position: relative; margin: 0; }
+.platform-preview::before { content: ""; position: absolute; inset: 5% -7% -3% 10%; border: 1px solid #b9cce2; }
+.platform-preview img { position: relative; display: block; width: 100%; height: auto; filter: drop-shadow(0 24px 38px rgba(26, 54, 90, 0.16)); }
+.platform-preview figcaption { position: relative; margin-top: 18px; color: var(--muted); font-size: 12px; text-align: center; }
 
 .release-section { padding: var(--section-space) 0 0; display: grid; grid-template-columns: 1fr 0.72fr; column-gap: 90px; }
 .release-copy { padding: 0 0 78px; }
@@ -157,6 +172,7 @@ footer nav { gap: 34px; color: var(--blue); }
   .interface-preview { margin: 0; }
   .advantage-section { padding: 58px 48px; grid-template-columns: 1fr; gap: 48px; }
   .advantage-heading p { max-width: 680px; }
+  .platform-section { padding: 72px 56px; grid-template-columns: minmax(360px, 1fr) minmax(300px, 0.72fr); gap: 48px; }
   .release-section { grid-template-columns: 1fr; }
   .release-status { padding: 40px 0 58px; border-top: 1px solid var(--line); border-left: 0; }
 }
@@ -189,6 +205,14 @@ footer nav { gap: 34px; color: var(--blue); }
   .advantage-grid { grid-template-columns: 1fr; }
   .advantage-grid article { min-height: auto; padding: 28px 24px; }
   .advantage-grid h3 { margin-top: 28px; }
+  .platform-section { padding: 52px 24px; grid-template-columns: 1fr; gap: 46px; }
+  .platform-copy h2 { font-size: 38px; }
+  .platform-copy > p { font-size: 16px; }
+  .compute-paths { grid-template-columns: 1fr; }
+  .compute-paths article { padding: 24px 0; }
+  .compute-paths article + article { padding-left: 0; border-top: 1px solid #b9cce2; border-left: 0; }
+  .platform-preview { width: min(100%, 390px); margin-inline: auto; }
+  .platform-preview::before { display: none; }
   .release-copy { padding-bottom: 56px; }
   .release-copy > p { font-size: 16px; }
   .release-actions { align-items: stretch; flex-direction: column; gap: 16px; }
