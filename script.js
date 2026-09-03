@@ -19,6 +19,8 @@ const translations = {
     deviceSwitcher: "切换设备界面",
     showMac: "显示 Mac 界面",
     showIpad: "显示 iPad 界面",
+    pauseCarousel: "暂停自动轮播",
+    playCarousel: "继续自动轮播",
     nativeRendering: "原生 SwiftUI + Metal",
     macCaption: "Mac 原生界面 · ACS 1996 文档样式",
     touchAndPencil: "触控 + Apple Pencil",
@@ -101,6 +103,8 @@ const translations = {
     deviceSwitcher: "Switch device interface",
     showMac: "Show the Mac interface",
     showIpad: "Show the iPad interface",
+    pauseCarousel: "Pause automatic carousel",
+    playCarousel: "Resume automatic carousel",
     nativeRendering: "Native SwiftUI + Metal",
     macCaption: "Native Mac interface · ACS 1996 document style",
     touchAndPencil: "Touch + Apple Pencil",
@@ -173,6 +177,9 @@ const experienceSection = document.querySelector(".experience-section");
 const experienceTabs = [...document.querySelectorAll("[data-experience-tab]")];
 const experiencePanels = [...document.querySelectorAll("[data-experience-panel]")];
 const experienceCounter = document.querySelector("[data-experience-counter]");
+const experienceAutoplay = document.querySelector("[data-experience-autoplay]");
+const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+const experienceAutoplayDelay = 7000;
 const downloadMatchers = {
   deploy: /^wa-chem_deploy_[^/]+\.tar\.gz$/,
   vos: /^wa-chem_[^/]+_pull\.tar$/,
@@ -182,6 +189,10 @@ const downloadMatchers = {
 
 let activeLanguage = "zh-CN";
 let latestRelease = null;
+let experienceAutoplayTimer = null;
+let experienceInView = false;
+let experienceTemporarilyPaused = false;
+let experienceUserPaused = false;
 
 const requestedLanguage = new URLSearchParams(window.location.search).get("lang");
 if (requestedLanguage === "en" || requestedLanguage === "zh-CN") {
@@ -246,6 +257,9 @@ function applyLanguage(language) {
   document.querySelectorAll("[data-i18n-aria]").forEach((element) => {
     element.setAttribute("aria-label", text(element.dataset.i18nAria));
   });
+  document.querySelectorAll("[data-i18n-title]").forEach((element) => {
+    element.title = text(element.dataset.i18nTitle);
+  });
   document.querySelectorAll("[data-i18n-alt]").forEach((element) => {
     element.alt = text(element.dataset.i18nAlt);
   });
@@ -276,8 +290,38 @@ function selectExperience(device, moveFocus = false) {
   experienceCounter.textContent = device === "mac" ? "01" : "02";
 }
 
+function stopExperienceAutoplay() {
+  window.clearTimeout(experienceAutoplayTimer);
+  experienceAutoplayTimer = null;
+}
+
+function scheduleExperienceAutoplay() {
+  stopExperienceAutoplay();
+  if (!experienceInView || experienceTemporarilyPaused || experienceUserPaused || reduceMotionQuery.matches || document.hidden) return;
+  experienceAutoplayTimer = window.setTimeout(() => {
+    const nextDevice = experienceSection.dataset.device === "mac" ? "ipad" : "mac";
+    selectExperience(nextDevice);
+    scheduleExperienceAutoplay();
+  }, experienceAutoplayDelay);
+}
+
+function setExperienceUserPaused(isPaused) {
+  experienceUserPaused = isPaused;
+  experienceAutoplay.dataset.paused = String(isPaused);
+  const translationKey = isPaused ? "playCarousel" : "pauseCarousel";
+  experienceAutoplay.dataset.i18nAria = translationKey;
+  experienceAutoplay.dataset.i18nTitle = translationKey;
+  experienceAutoplay.setAttribute("aria-label", text(translationKey));
+  experienceAutoplay.title = text(translationKey);
+  experienceAutoplay.setAttribute("aria-pressed", String(isPaused));
+  scheduleExperienceAutoplay();
+}
+
 experienceTabs.forEach((tab) => {
-  tab.addEventListener("click", () => selectExperience(tab.dataset.experienceTab));
+  tab.addEventListener("click", () => {
+    selectExperience(tab.dataset.experienceTab);
+    scheduleExperienceAutoplay();
+  });
   tab.addEventListener("keydown", (event) => {
     const navigationKeys = ["ArrowRight", "ArrowLeft", "Home", "End"];
     if (!navigationKeys.includes(event.key)) return;
@@ -289,8 +333,41 @@ experienceTabs.forEach((tab) => {
     if (event.key === "End") nextIndex = experienceTabs.length - 1;
     event.preventDefault();
     selectExperience(experienceTabs[nextIndex].dataset.experienceTab, true);
+    scheduleExperienceAutoplay();
   });
 });
+
+experienceAutoplay.addEventListener("click", () => setExperienceUserPaused(!experienceUserPaused));
+
+experienceSection.addEventListener("mouseenter", () => {
+  experienceTemporarilyPaused = true;
+  stopExperienceAutoplay();
+});
+
+experienceSection.addEventListener("mouseleave", () => {
+  experienceTemporarilyPaused = false;
+  scheduleExperienceAutoplay();
+});
+
+experienceSection.addEventListener("focusin", () => {
+  experienceTemporarilyPaused = true;
+  stopExperienceAutoplay();
+});
+
+experienceSection.addEventListener("focusout", (event) => {
+  if (experienceSection.contains(event.relatedTarget)) return;
+  experienceTemporarilyPaused = false;
+  scheduleExperienceAutoplay();
+});
+
+document.addEventListener("visibilitychange", scheduleExperienceAutoplay);
+reduceMotionQuery.addEventListener("change", scheduleExperienceAutoplay);
+
+const experienceObserver = new IntersectionObserver(([entry]) => {
+  experienceInView = entry.isIntersecting;
+  scheduleExperienceAutoplay();
+}, { threshold: 0.4 });
+experienceObserver.observe(experienceSection);
 
 languageToggle.addEventListener("click", () => {
   const language = activeLanguage === "zh-CN" ? "en" : "zh-CN";
@@ -307,6 +384,7 @@ languageToggle.addEventListener("click", () => {
 
 applyLanguage(activeLanguage);
 selectExperience("mac");
+setExperienceUserPaused(false);
 
 fetch("https://api.github.com/repos/huluxiaohuowa/wachem-web/releases/latest", {
   headers: { Accept: "application/vnd.github+json" },

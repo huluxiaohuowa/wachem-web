@@ -78,6 +78,12 @@ h1 { margin: 0; max-width: 650px; font-size: clamp(58px, 5.25vw, 84px); line-hei
 .experience-tabs button[aria-selected="true"] { color: var(--blue); }
 .experience-tabs svg { width: 21px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .experience-tabs button:focus-visible { outline: 3px solid rgba(9, 103, 237, 0.3); outline-offset: -3px; }
+.experience-status { display: flex; align-items: flex-start; gap: 12px; }
+.experience-autoplay { width: 34px; height: 34px; margin-top: 8px; display: grid; place-items: center; border: 1px solid transparent; background: transparent; color: var(--muted); cursor: pointer; transition: border-color 160ms ease, color 160ms ease; }
+.experience-autoplay:focus-visible { outline: 3px solid rgba(9, 103, 237, 0.3); outline-offset: 1px; }
+.experience-autoplay svg { grid-area: 1 / 1; width: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.experience-play-icon, .experience-autoplay[data-paused="true"] .experience-pause-icon { display: none; }
+.experience-autoplay[data-paused="true"] .experience-play-icon { display: block; }
 .experience-counter { padding-top: 17px; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
 .experience-counter strong { color: var(--blue); font-weight: 780; }
 .experience-panels { display: grid; }
@@ -218,6 +224,7 @@ footer nav { gap: 34px; color: var(--blue); }
   .experience-toolbar { min-height: 58px; }
   .experience-tabs { width: 100%; }
   .experience-tabs button { height: 48px; padding-inline: 12px; }
+  .experience-status { gap: 0; }
   .experience-counter { display: none; }
   .experience-panel { padding: 48px 0 42px; gap: 32px; }
   .experience-copy h2 { font-size: 40px; }
@@ -264,4 +271,5 @@ footer nav { gap: 34px; color: var(--blue); }
 
 @media (hover: hover) and (pointer: fine) {
   .experience-tabs button:hover { color: var(--blue); }
+  .experience-autoplay:hover { border-color: #b9cce2; color: var(--blue); }
 }

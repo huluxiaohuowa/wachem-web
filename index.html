@@ -95,7 +95,13 @@
               <span>iPad</span>
             </button>
           </div>
-          <span class="experience-counter" aria-live="polite"><strong data-experience-counter>01</strong> / 02</span>
+          <div class="experience-status">
+            <button class="experience-autoplay" type="button" data-experience-autoplay aria-label="暂停自动轮播" title="暂停自动轮播" data-i18n-aria="pauseCarousel" data-i18n-title="pauseCarousel">
+              <svg class="experience-pause-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 6v12M16 6v12" /></svg>
+              <svg class="experience-play-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 9 6-9 6Z" /></svg>
+            </button>
+            <span class="experience-counter"><strong data-experience-counter>01</strong> / 02</span>
+          </div>
         </div>
 
         <div class="experience-panels">
@@ -105,7 +111,6 @@
               <p data-i18n="interfaceBody">熟悉的元素、键型和结构属性集中在同一工作区。Mac 原生界面已支持 ACS 1996 文档样式。</p>
               <div class="experience-facts">
                 <span data-i18n="nativeRendering">原生 SwiftUI + Metal</span>
-                <span>ACS 1996</span>
               </div>
             </div>
             <figure class="experience-media experience-media-mac">
