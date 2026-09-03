@@ -67,8 +67,9 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 ## 部署要点
 
 - 独立服务器版统一从宿主机 `8799` 提供访问（避开 WA-DD 默认 `8800`）；API 不直接暴露宿主机端口；
-- 模型目录通过 `MODEL_HUB_SHARED_MODELS_PATH` 挂载到容器内 `/modelhub`；服务器端 OCSR 默认模型 `ms://huluxiaohuowa/wa-chem-ocsr-molparser-mobile`（PyTorch / CUDA），由独立 `wa-chem-ocsr` worker 加载，API 只代理统一识别协议；worker 镜像构建可设置 `WA_CHEM_OCSR_BUNDLE_MODEL=true` 在构建期从 ModelScope 下载并校验模型；Apple app 使用同版本 Core ML 产物 `ms://huluxiaohuowa/wa-chem-ocsr-molparser-mobile-coreml`，作为 app 资源或已校验的本地模型路径加载；
-- 部署脚本自动发现 WA-DD Compose 网络（实际网络名为 `wa-dd-amd` / `wa-dd-thor`，不要硬编码 `wa-dd`）；未安装 WA-DD 时独立运行；
+- 模型目录通过 `MODEL_HUB_SHARED_MODELS_PATH` 挂载到容器内 `/modelhub`；服务器端 OCSR 默认模型 `ms://huluxiaohuowa/wa-chem-ocsr-molparser-mobile`（PyTorch / CUDA），由独立 `wa-chem-ocsr` worker 加载，API 只代理统一识别协议；worker 镜像构建可设置 `WA_CHEM_OCSR_BUNDLE_MODEL=true` 在构建期从 ModelScope 下载并校验模型；默认 PyTorch 模型包走内置 MolParser-Mobile runner，其他模型包必须按 [OCSR 模型包合同](ocsr-model-contract.md) 声明 runner 和输出 JSON；VOS/Web 的模型下载、同步和资产化入口复用通用 Model Hub 管理方式，通过 `MODEL_HUB_API_URL` 与 `MODEL_HUB_SHARED_MODELS_PATH` 交互；Apple app 使用同版本 Core ML 产物 `ms://huluxiaohuowa/wa-chem-ocsr-molparser-mobile-coreml`，作为 app 资源或已校验的本地模型路径加载；
+- `deploy/` 独立部署自动发现本机 `wa-dd-*` Docker 网络，并把 WA Chem Web/API/OCSR 都接入同一个 WA-DD 网络；同网络内用 WA-DD 提供的稳定 DNS alias `wa-dd-web:8800` 访问。未发现本机 WA-DD 网络时，API 容器把 `wa-dd-web` 映射到 `host-gateway`，因此宿主机已发布 8800 端口时仍可在界面输入 `wa-dd-web` 或 `wa-dd-web:8800` 添加服务器；
+- `ictrek.app/` VOS 部署只接入 `vos_default`，WA-DD 的 VOS Web 服务同样通过 `wa-dd-web:8800` 这个 Docker DNS 名称访问；
 - VAI / VOS 适配（`ictrek.app`）在独立部署验收后启用，必须显式开启，不影响独立部署的登录/注册/管理员流程。
 
 ## Apple app 签名与公证（CI）

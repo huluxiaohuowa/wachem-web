@@ -1,6 +1,7 @@
 # WA Chem 文档
 
 - [开发指南](DEVELOPMENT.md)
+- [OCSR 模型包合同](ocsr-model-contract.md)
 - [ChemDraw / InDraw 功能与交互对标清单](chemdraw-parity.md)
 - [ADR 0001：编辑器核心契约与双渲染器架构](adr/0001-editor-core-contract.md)
 
