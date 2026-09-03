@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="WA Chem 官方门户：原生 Mac 与 iPad 化学结构工作台，支持数据自主存储、iCloud 同步及 WA-DD 互联。" />
+    <meta name="description" data-i18n-content="metaDescription" content="WA Chem 官方门户：原生 Mac 与 iPad 化学结构工作台，支持数据自主存储、iCloud 同步及 WA-DD 互联。" />
     <meta name="theme-color" content="#ffffff" />
     <title>WA Chem — 化学结构工作台</title>
     <link rel="icon" type="image/png" href="assets/wa-chem-logo.png" />
@@ -11,79 +11,87 @@
     <script defer src="script.js"></script>
   </head>
   <body>
-    <a class="skip-link" href="#main">跳到主要内容</a>
+    <a class="skip-link" href="#main" data-i18n="skipLink">跳到主要内容</a>
     <header class="site-header">
-      <a class="brand" href="#top" aria-label="WA Chem 首页">
+      <a class="brand" href="#top" aria-label="WA Chem 首页" data-i18n-aria="brandHome">
         <img src="assets/wa-chem-logo.png" alt="" width="42" height="42" />
         <span>WA Chem</span>
       </a>
-      <nav aria-label="主要导航">
-        <a href="#product">产品</a>
-        <a href="#releases">发布</a>
-        <a href="https://github.com/huluxiaohuowa/wachem-web/tree/main/docs">文档</a>
-        <a href="https://github.com/huluxiaohuowa/wachem-web">GitHub</a>
-      </nav>
+      <div class="header-actions">
+        <nav aria-label="主要导航" data-i18n-aria="mainNavigation">
+          <a href="#product" data-i18n="navProduct">产品</a>
+          <a href="#releases" data-i18n="navReleases">发布</a>
+          <a href="https://github.com/huluxiaohuowa/wachem-web/tree/main/docs" data-i18n="navDocs">文档</a>
+          <a href="https://github.com/huluxiaohuowa/wachem-web">GitHub</a>
+        </nav>
+        <button class="language-toggle" type="button" data-language-toggle aria-label="Switch to English">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" /></svg>
+          <span data-language-label>EN</span>
+        </button>
+      </div>
     </header>
 
     <main id="main">
       <section class="hero" id="top" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <h1 id="hero-title">把化学结构，<br />自然地画出来</h1>
-          <p>
+          <h1 id="hero-title" data-i18n-html="heroTitle">把化学结构，<br />自然地画出来</h1>
+          <p data-i18n-html="heroBody">
             从手绘与照片识别，到结构校正、保存和导出。<br />
             WA Chem 正在构建一套更顺手的化学结构工作台。<br />
             可接入 <a href="https://wa-dd.fuluwa.top">WA-DD</a> 进行配体结构编辑管理。
           </p>
           <div class="actions">
             <a class="button button-primary" href="#releases">
-              查看发布版本
+              <span data-i18n="viewReleases">查看发布版本</span>
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5" /></svg>
             </a>
             <a class="button button-secondary" href="https://github.com/huluxiaohuowa/wachem-web">
-              查看项目
+              <span data-i18n="viewProject">查看项目</span>
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5" /></svg>
             </a>
           </div>
-          <p class="release-note" data-release-status>首个公开版本准备中</p>
+          <p class="release-note" data-release-status data-i18n="releasePending">首个公开版本准备中</p>
         </div>
 
         <figure class="molecule-stage">
           <img
             src="assets/hero-ai-assisted.jpg"
             alt="WA Chem 中由 AI 辅助识别与编辑化学结构的理念图"
+            data-i18n-alt="heroAlt"
             width="1535"
             height="1024"
           />
         </figure>
       </section>
 
-      <section class="product-strip" id="product" aria-label="WA Chem 核心流程">
+      <section class="product-strip" id="product" aria-label="WA Chem 核心流程" data-i18n-aria="productFlow">
         <div>
           <span class="strip-number">01</span>
-          <h2>自然绘制</h2>
-          <p>围绕原子、键、环和选择建立低摩擦的编辑体验。</p>
+          <h2 data-i18n="naturalDrawing">自然绘制</h2>
+          <p data-i18n="naturalDrawingBody">围绕原子、键、环和选择建立低摩擦的编辑体验。</p>
         </div>
         <div>
           <span class="strip-number">02</span>
-          <h2>识别与校正</h2>
-          <p>让截图、论文图片和手绘结构重新成为可编辑内容。</p>
+          <h2 data-i18n="recognitionCorrection">识别与校正</h2>
+          <p data-i18n="recognitionCorrectionBody">让截图、论文图片和手绘结构重新成为可编辑内容。</p>
         </div>
         <div>
           <span class="strip-number">03</span>
-          <h2>保存与交换</h2>
-          <p>在同一工作区完成保存、格式导入导出与后续计算。</p>
+          <h2 data-i18n="saveExchange">保存与交换</h2>
+          <p data-i18n="saveExchangeBody">在同一工作区完成保存、格式导入导出与后续计算。</p>
         </div>
       </section>
 
       <section class="interface-section" id="interface" aria-labelledby="interface-title">
         <div class="interface-heading">
-          <h2 id="interface-title">专注真实的绘制体验</h2>
-          <p>熟悉的元素、键型和结构属性集中在同一工作区。Mac 原生界面已支持 ACS 1996 文档样式。</p>
+          <h2 id="interface-title" data-i18n="interfaceTitle">专注真实的绘制体验</h2>
+          <p data-i18n="interfaceBody">熟悉的元素、键型和结构属性集中在同一工作区。Mac 原生界面已支持 ACS 1996 文档样式。</p>
         </div>
         <figure class="interface-preview">
           <img
             src="assets/editor-mac.webp"
             alt="WA Chem Mac 原生编辑器界面，画布使用 ACS 1996 文档样式"
+            data-i18n-alt="interfaceAlt"
             width="2200"
             height="1234"
             loading="lazy"
@@ -94,29 +102,29 @@
       <section class="advantage-section" aria-labelledby="advantage-title">
         <div class="advantage-heading">
           <span>Why WA Chem</span>
-          <h2 id="advantage-title">围绕你的数据，做一套真正原生的工作台</h2>
-          <p>从设备内的数据归属，到跨设备协作与资产组织，WA Chem 的产品逻辑为长期研究工作而设计。</p>
+          <h2 id="advantage-title" data-i18n="advantageTitle">围绕你的数据，做一套真正原生的工作台</h2>
+          <p data-i18n="advantageBody">从设备内的数据归属，到跨设备协作与资产组织，WA Chem 的产品逻辑为长期研究工作而设计。</p>
         </div>
         <div class="advantage-grid">
           <article>
             <span>01</span>
-            <h3>数据自主</h3>
-            <p>结构与项目数据由你自行存储，并可通过 iCloud 在 Mac 与 iPad 间同步。</p>
+            <h3 data-i18n="dataOwnership">数据自主</h3>
+            <p data-i18n="dataOwnershipBody">结构与项目数据由你自行存储，并可通过 iCloud 在 Mac 与 iPad 间同步。</p>
           </article>
           <article>
             <span>02</span>
-            <h3>原生统一</h3>
-            <p>同一套 iPad 与 Mac 应用，纯 Apple 原生开发，不包含 JavaScript / TypeScript Web 运行层。</p>
+            <h3 data-i18n="nativeUnified">原生统一</h3>
+            <p data-i18n="nativeUnifiedBody">同一套 iPad 与 Mac 应用，纯 Apple 原生开发，不包含 JavaScript / TypeScript Web 运行层。</p>
           </article>
           <article>
             <span>03</span>
-            <h3>WA-DD 互联</h3>
-            <p>连接 <a href="https://wa-dd.fuluwa.top">WA-DD</a>，在工作台中选择、编辑并管理配体结构。</p>
+            <h3 data-i18n="waDdConnection">WA-DD 互联</h3>
+            <p data-i18n-html="waDdConnectionBody">连接 <a href="https://wa-dd.fuluwa.top">WA-DD</a>，在工作台中选择、编辑并管理配体结构。</p>
           </article>
           <article>
             <span>04</span>
-            <h3>资产管理</h3>
-            <p>围绕项目、资产与分子的关系深度优化，让查找、追加、保存与导出更清晰。</p>
+            <h3 data-i18n="assetManagement">资产管理</h3>
+            <p data-i18n="assetManagementBody">围绕项目、资产与分子的关系深度优化，让查找、追加、保存与导出更清晰。</p>
           </article>
         </div>
       </section>
@@ -124,18 +132,18 @@
       <section class="platform-section" id="platform" aria-labelledby="platform-title">
         <div class="platform-copy">
           <span>One app · Two devices</span>
-          <h2 id="platform-title">Mac 与 iPad，统一的不只是界面</h2>
-          <p>同一套原生 Apple 应用，共享编辑器、文档和资产管理逻辑；针对键鼠、触控与 Apple Pencil 自然适配。</p>
-          <div class="compute-paths" aria-label="不同版本的模型算力来源">
+          <h2 id="platform-title" data-i18n="platformTitle">Mac 与 iPad，统一的不只是界面</h2>
+          <p data-i18n="platformBody">同一套原生 Apple 应用，共享编辑器、文档和资产管理逻辑；针对键鼠、触控与 Apple Pencil 自然适配。</p>
+          <div class="compute-paths" aria-label="不同版本的模型算力来源" data-i18n-aria="computePaths">
             <article>
               <span>Apple App</span>
-              <strong>使用本地算力</strong>
-              <p>模型在 Apple 设备本地运行，延续原生应用的数据与工作流体验。</p>
+              <strong data-i18n="localCompute">使用本地算力</strong>
+              <p data-i18n="localComputeBody">模型在 Apple 设备本地运行，延续原生应用的数据与工作流体验。</p>
             </article>
             <article>
               <span>Web</span>
-              <strong>使用服务器算力</strong>
-              <p>模型由部署 WA Chem 的服务器运行，浏览器负责连接与操作。</p>
+              <strong data-i18n="serverCompute">使用服务器算力</strong>
+              <p data-i18n="serverComputeBody">模型由部署 WA Chem 的服务器运行，浏览器负责连接与操作。</p>
             </article>
           </div>
         </div>
@@ -143,43 +151,44 @@
           <img
             src="docs/assets/editor-ipad.webp"
             alt="WA Chem 在 iPad 上运行的原生编辑器界面"
+            data-i18n-alt="ipadAlt"
             width="1000"
             height="1295"
             loading="lazy"
           />
-          <figcaption>iPad 原生界面 · 与 Mac 共享产品逻辑</figcaption>
+          <figcaption data-i18n="ipadCaption">iPad 原生界面 · 与 Mac 共享产品逻辑</figcaption>
         </figure>
       </section>
 
       <section class="release-section" id="releases" aria-labelledby="releases-title">
         <div class="release-copy">
-          <h2 id="releases-title">获取 WA Chem</h2>
-          <p>发布包将通过 GitHub Releases 提供。每个版本都包含变更说明、校验信息和对应平台的下载文件。</p>
+          <h2 id="releases-title" data-i18n="getWaChem">获取 WA Chem</h2>
+          <p data-i18n="releaseBody">发布包将通过 GitHub Releases 提供。每个版本都包含变更说明、校验信息和对应平台的下载文件。</p>
           <div class="release-actions">
             <a class="button button-primary" href="https://github.com/huluxiaohuowa/wachem-web/releases">
-              前往 Releases
+              <span data-i18n="goToReleases">前往 Releases</span>
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 5h5v5m0-5-8 8M19 14v5H5V5h5" /></svg>
             </a>
-            <a class="github-link" href="https://github.com/huluxiaohuowa/wachem-web" aria-label="在 GitHub 查看 wachem-web">
+            <a class="github-link" href="https://github.com/huluxiaohuowa/wachem-web" aria-label="在 GitHub 查看 wachem-web" data-i18n-aria="viewOnGitHub">
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.88c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.83.09-.65.35-1.09.64-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.82c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.86v2.76c0 .27.18.58.69.48A10 10 0 0 0 12 2Z" /></svg>
             </a>
           </div>
         </div>
         <div class="release-status" aria-live="polite">
-          <span>当前状态</span>
+          <span data-i18n="currentStatus">当前状态</span>
           <div class="flask" aria-hidden="true">
             <svg viewBox="0 0 64 64"><path d="M24 8h16M28 8v17L14 49a5 5 0 0 0 4 7h28a5 5 0 0 0 4-7L36 25V8M21 42h22" /><circle cx="27" cy="35" r="2" /><circle cx="38" cy="30" r="2" /></svg>
           </div>
-          <strong data-release-status>首个公开版本准备中</strong>
+          <strong data-release-status data-i18n="releasePending">首个公开版本准备中</strong>
         </div>
 
         <div class="latest-downloads" aria-labelledby="latest-downloads-title">
           <div class="downloads-heading">
             <div>
               <span>Latest Release</span>
-              <h3 id="latest-downloads-title">选择下载包</h3>
+              <h3 id="latest-downloads-title" data-i18n="chooseDownload">选择下载包</h3>
             </div>
-            <a data-release-page href="https://github.com/huluxiaohuowa/wachem-web/releases">查看版本说明</a>
+            <a data-release-page href="https://github.com/huluxiaohuowa/wachem-web/releases" data-i18n="viewReleaseNotes">查看版本说明</a>
           </div>
           <div class="download-list">
             <a
@@ -189,10 +198,10 @@
             >
               <span class="download-index">01</span>
               <span class="download-copy">
-                <strong>独立 Web 部署包</strong>
-                <small>服务器部署 · tar.gz</small>
+                <strong data-i18n="webDeployPackage">独立 Web 部署包</strong>
+                <small data-i18n="webDeployPackageMeta">服务器部署 · tar.gz</small>
               </span>
-              <span class="download-meta" data-download-meta>等待发布</span>
+              <span class="download-meta" data-download-meta data-i18n="waitingRelease">等待发布</span>
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M5 19h14" /></svg>
             </a>
             <a
@@ -202,10 +211,10 @@
             >
               <span class="download-index">02</span>
               <span class="download-copy">
-                <strong>VOS App 包</strong>
-                <small>VOS 应用安装 · pull.tar</small>
+                <strong data-i18n="vosPackage">VOS App 包</strong>
+                <small data-i18n="vosPackageMeta">VOS 应用安装 · pull.tar</small>
               </span>
-              <span class="download-meta" data-download-meta>等待发布</span>
+              <span class="download-meta" data-download-meta data-i18n="waitingRelease">等待发布</span>
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M5 19h14" /></svg>
             </a>
             <a
@@ -216,18 +225,18 @@
               <span class="download-index">03</span>
               <span class="download-copy">
                 <strong>Mac App</strong>
-                <small>Apple Silicon · dmg</small>
+                <small data-i18n="macPackageMeta">Apple Silicon · dmg</small>
               </span>
-              <span class="download-meta" data-download-meta>等待发布</span>
+              <span class="download-meta" data-download-meta data-i18n="waitingRelease">等待发布</span>
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M5 19h14" /></svg>
             </a>
             <div class="download-item is-pending store-item">
               <span class="download-index">04</span>
               <span class="download-copy">
-                <strong>应用商店</strong>
-                <small>macOS 与 iPadOS · 即将上架</small>
+                <strong data-i18n="appStore">应用商店</strong>
+                <small data-i18n="appStoreMeta">macOS 与 iPadOS · 即将上架</small>
               </span>
-              <span class="store-placeholders" aria-label="Mac App Store 与 iPad App Store 尚未上架">
+              <span class="store-placeholders" aria-label="Mac App Store 与 iPad App Store 尚未上架" data-i18n-aria="appStoresPending">
                 <span class="store-placeholder">
                   <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 17 4-10 4 10M9.5 14h5M6 17h2m8 0h2" /></svg>
                   Mac
@@ -237,43 +246,43 @@
                   iPad
                 </span>
               </span>
-              <span class="store-coming">即将上架</span>
+              <span class="store-coming" data-i18n="comingSoon">即将上架</span>
             </div>
           </div>
-          <a class="checksum-link" data-download-key="checksums" href="https://github.com/huluxiaohuowa/wachem-web/releases">
+          <a class="checksum-link" data-download-key="checksums" data-i18n="checksumsPending" href="https://github.com/huluxiaohuowa/wachem-web/releases">
             SHA256 校验文件将在版本发布后提供
           </a>
         </div>
 
-        <ol class="release-steps" aria-label="开始使用的三个步骤">
+        <ol class="release-steps" aria-label="开始使用的三个步骤" data-i18n-aria="gettingStartedSteps">
           <li>
             <span>1</span>
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M5 19h14" /></svg>
-            <strong>下载</strong>
+            <strong data-i18n="download">下载</strong>
           </li>
           <li>
             <span>2</span>
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m4 7 8-4 8 4-8 4-8-4Zm0 0v10l8 4 8-4V7m-8 4v10" /></svg>
-            <strong>安装</strong>
+            <strong data-i18n="install">安装</strong>
           </li>
           <li>
             <span>3</span>
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 17 3 21l4-2 10-10-2-2L5 17Zm9-9 2 2m1-5 2-2 2 2-2 2" /></svg>
-            <strong>开始绘制</strong>
+            <strong data-i18n="startDrawing">开始绘制</strong>
           </li>
         </ol>
       </section>
     </main>
 
     <footer>
-      <a class="brand" href="#top" aria-label="返回顶部">
+      <a class="brand" href="#top" aria-label="返回顶部" data-i18n-aria="backToTop">
         <img src="assets/wa-chem-logo.png" alt="" width="36" height="36" />
         <span>WA Chem</span>
       </a>
-      <nav aria-label="页脚导航">
+      <nav aria-label="页脚导航" data-i18n-aria="footerNavigation">
         <a href="https://github.com/huluxiaohuowa/wachem-web">GitHub</a>
         <a href="https://github.com/huluxiaohuowa/wachem-web/releases">Releases</a>
-        <a href="https://github.com/huluxiaohuowa/wachem-web/tree/main/docs">文档</a>
+        <a href="https://github.com/huluxiaohuowa/wachem-web/tree/main/docs" data-i18n="navDocs">文档</a>
       </nav>
     </footer>
   </body>

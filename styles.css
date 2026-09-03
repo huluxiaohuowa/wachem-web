@@ -29,9 +29,13 @@ svg { display: block; }
 .site-header { min-height: 96px; }
 .brand { display: inline-flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 760; letter-spacing: -0.04em; }
 .brand img { object-fit: contain; }
+.header-actions { display: flex; align-items: center; gap: 30px; }
 nav { display: flex; align-items: center; gap: 42px; }
 nav a { font-size: 15px; font-weight: 620; }
 nav a:hover { color: var(--blue); }
+.language-toggle { min-width: 64px; height: 40px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 1px solid var(--line); border-radius: 20px; background: var(--white); color: var(--ink); font: inherit; font-size: 12px; font-weight: 760; cursor: pointer; transition: border-color 160ms ease, color 160ms ease, background 160ms ease; }
+.language-toggle:hover { border-color: var(--blue); background: var(--blue-pale); color: var(--blue); }
+.language-toggle svg { width: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
 .hero { position: relative; isolation: isolate; min-height: 700px; border-top: 1px solid var(--line); display: grid; grid-template-columns: minmax(450px, 0.9fr) minmax(620px, 1.1fr); align-items: center; gap: 0; padding: 70px 0 104px; }
 .hero::before { content: ""; position: absolute; z-index: -2; top: 24px; right: -2%; bottom: 24px; left: 34%; background: var(--blue-pale); -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 24%, #000 100%), linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent 0%, #000 24%, #000 100%), linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%); mask-composite: intersect; }
@@ -48,7 +52,7 @@ h1 { margin: 0; max-width: 650px; font-size: clamp(58px, 5.25vw, 84px); line-hei
 .button-primary:hover { background: var(--blue-dark); transform: translateY(-2px); }
 .button-secondary { background: var(--white); color: var(--blue); }
 .button-secondary:hover { background: #f6f9ff; transform: translateY(-2px); }
-.button:focus-visible, .text-link:focus-visible, nav a:focus-visible, .brand:focus-visible { outline: 3px solid rgba(9, 103, 237, 0.3); outline-offset: 4px; }
+.button:focus-visible, .text-link:focus-visible, nav a:focus-visible, .brand:focus-visible, .language-toggle:focus-visible { outline: 3px solid rgba(9, 103, 237, 0.3); outline-offset: 4px; }
 .release-note { margin: 28px 0 0; color: var(--muted); font-size: 14px; }
 
 .molecule-stage { position: relative; z-index: 1; min-height: 540px; margin: 0 -24px 0 -96px; display: grid; place-items: center; }
@@ -150,6 +154,8 @@ footer nav { gap: 34px; color: var(--blue); }
 
 @media (max-width: 1100px) {
   :root { --gutter: 30px; }
+  .header-actions { gap: 20px; }
+  nav { gap: 30px; }
   .hero { grid-template-columns: minmax(390px, 0.85fr) minmax(480px, 1.15fr); }
   .hero::before { left: 40%; }
   .molecule-stage { margin-right: 0; margin-left: -54px; }
@@ -181,6 +187,7 @@ footer nav { gap: 34px; color: var(--blue); }
   :root { --gutter: 16px; --section-space: 72px; }
   .site-header { min-height: 80px; }
   .site-header nav { display: none; }
+  .header-actions { gap: 0; }
   .brand { font-size: 21px; }
   .hero { padding: 54px 0 82px; }
   h1 { font-size: clamp(44px, 13vw, 62px); }
