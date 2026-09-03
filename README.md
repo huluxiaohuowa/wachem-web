@@ -8,6 +8,14 @@
 
 ![WA Chem 编辑器](docs/assets/editor-main.jpg)
 
+### Mac 与 iPad，统一原生体验
+
+WA Chem 在 Mac 与 iPad 上使用同一套原生 Apple 应用、共享同一套编辑器与资产管理逻辑；界面会针对键鼠、触控和 Apple Pencil 自然适配，不需要在两个产品之间切换。
+
+<p align="center">
+  <img src="docs/assets/editor-ipad.webp" alt="WA Chem 在 iPad 上运行的原生编辑器界面" width="640">
+</p>
+
 ## 主要功能
 
 ### 结构绘制
