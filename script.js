@@ -10,11 +10,19 @@ const translations = {
     navDocs: "文档",
     heroTitle: "把化学结构，<br />自然地画出来",
     heroBody: '从手绘与照片识别，到结构校正、保存和导出。<br />WA Chem 正在构建一套更顺手的化学结构工作台。<br />可接入 <a href="https://wa-dd.fuluwa.top">WA-DD</a> 进行配体结构编辑管理。',
-    viewReleases: "查看发布版本",
+    viewReleases: "下载安装",
     viewProject: "查看项目",
     releasePending: "首个公开版本准备中",
     heroAlt: "WA Chem 中由 AI 辅助识别与编辑化学结构的理念图",
     productFlow: "WA Chem 核心流程",
+    nativeExperience: "Mac 与 iPad 原生统一体验",
+    deviceSwitcher: "切换设备界面",
+    showMac: "显示 Mac 界面",
+    showIpad: "显示 iPad 界面",
+    nativeRendering: "原生 SwiftUI + Metal",
+    macCaption: "Mac 原生界面 · ACS 1996 文档样式",
+    touchAndPencil: "触控 + Apple Pencil",
+    icloudSync: "iCloud 同步",
     naturalDrawing: "自然绘制",
     naturalDrawingBody: "围绕原子、键、环和选择建立低摩擦的编辑体验。",
     recognitionCorrection: "识别与校正",
@@ -84,11 +92,19 @@ const translations = {
     navDocs: "Docs",
     heroTitle: "Draw chemical structures,<br />naturally",
     heroBody: 'Turn sketches and images into editable structures, then refine, save, and export them. <br />WA Chem is building a smoother workspace for chemical structure work. <br />Connect to <a href="https://wa-dd.fuluwa.top">WA-DD</a> to edit and manage ligand structures.',
-    viewReleases: "View releases",
+    viewReleases: "Download & install",
     viewProject: "View project",
     releasePending: "First public release in preparation",
     heroAlt: "Concept artwork showing AI-assisted chemical structure recognition and editing in WA Chem",
     productFlow: "WA Chem core workflow",
+    nativeExperience: "Unified native experience on Mac and iPad",
+    deviceSwitcher: "Switch device interface",
+    showMac: "Show the Mac interface",
+    showIpad: "Show the iPad interface",
+    nativeRendering: "Native SwiftUI + Metal",
+    macCaption: "Native Mac interface · ACS 1996 document style",
+    touchAndPencil: "Touch + Apple Pencil",
+    icloudSync: "iCloud sync",
     naturalDrawing: "Natural drawing",
     naturalDrawingBody: "A low-friction editing experience built around atoms, bonds, rings, and selection.",
     recognitionCorrection: "Recognize and refine",
@@ -153,6 +169,10 @@ const releaseStatus = document.querySelectorAll("[data-release-status]");
 const releasePageLinks = document.querySelectorAll("[data-release-page]");
 const languageToggle = document.querySelector("[data-language-toggle]");
 const languageLabel = document.querySelector("[data-language-label]");
+const experienceSection = document.querySelector(".experience-section");
+const experienceTabs = [...document.querySelectorAll("[data-experience-tab]")];
+const experiencePanels = [...document.querySelectorAll("[data-experience-panel]")];
+const experienceCounter = document.querySelector("[data-experience-counter]");
 const downloadMatchers = {
   deploy: /^wa-chem_deploy_[^/]+\.tar\.gz$/,
   vos: /^wa-chem_[^/]+_pull\.tar$/,
@@ -238,6 +258,40 @@ function applyLanguage(language) {
   applyRelease(latestRelease);
 }
 
+function selectExperience(device, moveFocus = false) {
+  if (device !== "mac" && device !== "ipad") return;
+  experienceSection.dataset.device = device;
+  experienceTabs.forEach((tab) => {
+    const isActive = tab.dataset.experienceTab === device;
+    tab.setAttribute("aria-selected", String(isActive));
+    tab.tabIndex = isActive ? 0 : -1;
+    if (isActive && moveFocus) tab.focus();
+  });
+  experiencePanels.forEach((panel) => {
+    const isActive = panel.dataset.experiencePanel === device;
+    panel.classList.toggle("is-active", isActive);
+    panel.setAttribute("aria-hidden", String(!isActive));
+    panel.inert = !isActive;
+  });
+  experienceCounter.textContent = device === "mac" ? "01" : "02";
+}
+
+experienceTabs.forEach((tab) => {
+  tab.addEventListener("click", () => selectExperience(tab.dataset.experienceTab));
+  tab.addEventListener("keydown", (event) => {
+    const navigationKeys = ["ArrowRight", "ArrowLeft", "Home", "End"];
+    if (!navigationKeys.includes(event.key)) return;
+    const currentIndex = experienceTabs.indexOf(tab);
+    let nextIndex = currentIndex;
+    if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % experienceTabs.length;
+    if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + experienceTabs.length) % experienceTabs.length;
+    if (event.key === "Home") nextIndex = 0;
+    if (event.key === "End") nextIndex = experienceTabs.length - 1;
+    event.preventDefault();
+    selectExperience(experienceTabs[nextIndex].dataset.experienceTab, true);
+  });
+});
+
 languageToggle.addEventListener("click", () => {
   const language = activeLanguage === "zh-CN" ? "en" : "zh-CN";
   const url = new URL(window.location.href);
@@ -252,6 +306,7 @@ languageToggle.addEventListener("click", () => {
 });
 
 applyLanguage(activeLanguage);
+selectExperience("mac");
 
 fetch("https://api.github.com/repos/huluxiaohuowa/wachem-web/releases/latest", {
   headers: { Accept: "application/vnd.github+json" },

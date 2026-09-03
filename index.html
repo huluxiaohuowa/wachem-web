@@ -82,21 +82,80 @@
         </div>
       </section>
 
-      <section class="interface-section" id="interface" aria-labelledby="interface-title">
-        <div class="interface-heading">
-          <h2 id="interface-title" data-i18n="interfaceTitle">专注真实的绘制体验</h2>
-          <p data-i18n="interfaceBody">熟悉的元素、键型和结构属性集中在同一工作区。Mac 原生界面已支持 ACS 1996 文档样式。</p>
+      <section class="experience-section" id="interface" data-device="mac" aria-label="Mac 与 iPad 原生统一体验" data-i18n-aria="nativeExperience">
+        <span class="anchor-target" id="platform" aria-hidden="true"></span>
+        <div class="experience-toolbar">
+          <div class="experience-tabs" role="tablist" aria-label="切换设备界面" data-i18n-aria="deviceSwitcher">
+            <button id="tab-mac" type="button" role="tab" aria-selected="true" aria-controls="panel-mac" data-experience-tab="mac" data-i18n-aria="showMac">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5" /><path d="M8 20h8M12 16v4" /></svg>
+              <span>Mac</span>
+            </button>
+            <button id="tab-ipad" type="button" role="tab" aria-selected="false" aria-controls="panel-ipad" tabindex="-1" data-experience-tab="ipad" data-i18n-aria="showIpad">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2" /><path d="M10 18.5h4" /></svg>
+              <span>iPad</span>
+            </button>
+          </div>
+          <span class="experience-counter" aria-live="polite"><strong data-experience-counter>01</strong> / 02</span>
         </div>
-        <figure class="interface-preview">
-          <img
-            src="assets/editor-mac.webp"
-            alt="WA Chem Mac 原生编辑器界面，画布使用 ACS 1996 文档样式"
-            data-i18n-alt="interfaceAlt"
-            width="2200"
-            height="1234"
-            loading="lazy"
-          />
-        </figure>
+
+        <div class="experience-panels">
+          <article class="experience-panel is-active" id="panel-mac" role="tabpanel" aria-labelledby="tab-mac" data-experience-panel="mac">
+            <div class="experience-copy">
+              <h2 data-i18n="interfaceTitle">专注真实的绘制体验</h2>
+              <p data-i18n="interfaceBody">熟悉的元素、键型和结构属性集中在同一工作区。Mac 原生界面已支持 ACS 1996 文档样式。</p>
+              <div class="experience-facts">
+                <span data-i18n="nativeRendering">原生 SwiftUI + Metal</span>
+                <span>ACS 1996</span>
+              </div>
+            </div>
+            <figure class="experience-media experience-media-mac">
+              <img
+                src="assets/editor-mac.webp"
+                alt="WA Chem Mac 原生编辑器界面，画布使用 ACS 1996 文档样式"
+                data-i18n-alt="interfaceAlt"
+                width="2200"
+                height="1234"
+                loading="lazy"
+              />
+              <figcaption data-i18n="macCaption">Mac 原生界面 · ACS 1996 文档样式</figcaption>
+            </figure>
+          </article>
+
+          <article class="experience-panel" id="panel-ipad" role="tabpanel" aria-labelledby="tab-ipad" aria-hidden="true" inert data-experience-panel="ipad">
+            <div class="experience-copy">
+              <h2 data-i18n="platformTitle">Mac 与 iPad，统一的不只是界面</h2>
+              <p data-i18n="platformBody">同一套原生 Apple 应用，共享编辑器、文档和资产管理逻辑；针对键鼠、触控与 Apple Pencil 自然适配。</p>
+              <div class="experience-facts">
+                <span data-i18n="touchAndPencil">触控 + Apple Pencil</span>
+                <span data-i18n="icloudSync">iCloud 同步</span>
+              </div>
+            </div>
+            <figure class="experience-media experience-media-ipad">
+              <img
+                src="docs/assets/editor-ipad.webp"
+                alt="WA Chem 在 iPad 上运行的原生编辑器界面"
+                data-i18n-alt="ipadAlt"
+                width="1000"
+                height="1295"
+                loading="lazy"
+              />
+              <figcaption data-i18n="ipadCaption">iPad 原生界面 · 与 Mac 共享产品逻辑</figcaption>
+            </figure>
+          </article>
+        </div>
+
+        <div class="compute-paths" aria-label="不同版本的模型算力来源" data-i18n-aria="computePaths">
+          <article>
+            <span>Apple App</span>
+            <strong data-i18n="localCompute">使用本地算力</strong>
+            <p data-i18n="localComputeBody">模型在 Apple 设备本地运行，延续原生应用的数据与工作流体验。</p>
+          </article>
+          <article>
+            <span>Web</span>
+            <strong data-i18n="serverCompute">使用服务器算力</strong>
+            <p data-i18n="serverComputeBody">模型由部署 WA Chem 的服务器运行，浏览器负责连接与操作。</p>
+          </article>
+        </div>
       </section>
 
       <section class="advantage-section" aria-labelledby="advantage-title">
@@ -127,37 +186,6 @@
             <p data-i18n="assetManagementBody">围绕项目、资产与分子的关系深度优化，让查找、追加、保存与导出更清晰。</p>
           </article>
         </div>
-      </section>
-
-      <section class="platform-section" id="platform" aria-labelledby="platform-title">
-        <div class="platform-copy">
-          <span>One app · Two devices</span>
-          <h2 id="platform-title" data-i18n="platformTitle">Mac 与 iPad，统一的不只是界面</h2>
-          <p data-i18n="platformBody">同一套原生 Apple 应用，共享编辑器、文档和资产管理逻辑；针对键鼠、触控与 Apple Pencil 自然适配。</p>
-          <div class="compute-paths" aria-label="不同版本的模型算力来源" data-i18n-aria="computePaths">
-            <article>
-              <span>Apple App</span>
-              <strong data-i18n="localCompute">使用本地算力</strong>
-              <p data-i18n="localComputeBody">模型在 Apple 设备本地运行，延续原生应用的数据与工作流体验。</p>
-            </article>
-            <article>
-              <span>Web</span>
-              <strong data-i18n="serverCompute">使用服务器算力</strong>
-              <p data-i18n="serverComputeBody">模型由部署 WA Chem 的服务器运行，浏览器负责连接与操作。</p>
-            </article>
-          </div>
-        </div>
-        <figure class="platform-preview">
-          <img
-            src="docs/assets/editor-ipad.webp"
-            alt="WA Chem 在 iPad 上运行的原生编辑器界面"
-            data-i18n-alt="ipadAlt"
-            width="1000"
-            height="1295"
-            loading="lazy"
-          />
-          <figcaption data-i18n="ipadCaption">iPad 原生界面 · 与 Mac 共享产品逻辑</figcaption>
-        </figure>
       </section>
 
       <section class="release-section" id="releases" aria-labelledby="releases-title">
