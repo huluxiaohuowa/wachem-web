@@ -24,7 +24,7 @@ svg { display: block; }
 .skip-link { position: fixed; left: 16px; top: -60px; z-index: 20; padding: 10px 14px; background: var(--ink); color: var(--white); transition: top 160ms ease; }
 .skip-link:focus { top: 16px; }
 
-.site-header, footer, .hero, .product-strip, .interface-section, .release-section { width: min(calc(100% - (var(--gutter) * 2)), var(--max)); margin-inline: auto; }
+.site-header, footer, .hero, .product-strip, .interface-section, .advantage-section, .release-section { width: min(calc(100% - (var(--gutter) * 2)), var(--max)); margin-inline: auto; }
 .site-header, footer { display: flex; align-items: center; justify-content: space-between; }
 .site-header { min-height: 96px; }
 .brand { display: inline-flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 760; letter-spacing: -0.04em; }
@@ -72,6 +72,18 @@ h1 { margin: 0; max-width: 650px; font-size: clamp(58px, 5.25vw, 84px); line-hei
 .interface-preview { position: relative; margin: 0; }
 .interface-preview::before { content: ""; position: absolute; z-index: -1; inset: 9% 0 -7% 12%; border: 1px solid #c8d9ed; }
 .interface-preview img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 28px 68px rgba(26, 54, 90, 0.13); }
+
+.advantage-section { margin-top: var(--section-space); padding: 72px; display: grid; grid-template-columns: minmax(300px, 0.8fr) minmax(620px, 1.2fr); gap: 84px; background: var(--ink); color: var(--white); }
+.advantage-heading > span { display: block; margin-bottom: 24px; color: #72adff; font-size: 11px; font-weight: 780; letter-spacing: 0.16em; text-transform: uppercase; }
+.advantage-heading h2 { max-width: 490px; margin: 0; font-size: clamp(38px, 3.4vw, 54px); line-height: 1.12; letter-spacing: -0.055em; }
+.advantage-heading p { max-width: 460px; margin: 28px 0 0; color: #b8c7d8; font-size: 16px; line-height: 1.8; }
+.advantage-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid rgba(255, 255, 255, 0.22); border-left: 1px solid rgba(255, 255, 255, 0.22); }
+.advantage-grid article { min-height: 230px; padding: 32px; border-right: 1px solid rgba(255, 255, 255, 0.22); border-bottom: 1px solid rgba(255, 255, 255, 0.22); }
+.advantage-grid article > span { color: #72adff; font-size: 12px; font-weight: 780; letter-spacing: 0.12em; }
+.advantage-grid h3 { margin: 42px 0 14px; font-size: 22px; letter-spacing: -0.035em; }
+.advantage-grid p { margin: 0; color: #b8c7d8; font-size: 14px; line-height: 1.72; }
+.advantage-grid a { color: var(--white); text-decoration: underline; text-decoration-color: #72adff; text-underline-offset: 4px; }
+.advantage-grid a:hover { color: #72adff; }
 
 .release-section { padding: var(--section-space) 0 0; display: grid; grid-template-columns: 1fr 0.72fr; column-gap: 90px; }
 .release-copy { padding: 0 0 78px; }
@@ -143,6 +155,8 @@ footer nav { gap: 34px; color: var(--blue); }
   .interface-section { padding: 120px 36px 110px; grid-template-columns: 1fr; gap: 44px; }
   .interface-heading p { max-width: 620px; }
   .interface-preview { margin: 0; }
+  .advantage-section { padding: 58px 48px; grid-template-columns: 1fr; gap: 48px; }
+  .advantage-heading p { max-width: 680px; }
   .release-section { grid-template-columns: 1fr; }
   .release-status { padding: 40px 0 58px; border-top: 1px solid var(--line); border-left: 0; }
 }
@@ -169,6 +183,12 @@ footer nav { gap: 34px; color: var(--blue); }
   .interface-heading p { font-size: 16px; }
   .interface-preview::before { display: none; }
   .interface-preview img { border-radius: 10px; box-shadow: 0 16px 42px rgba(26, 54, 90, 0.11); }
+  .advantage-section { padding: 44px 24px; gap: 38px; }
+  .advantage-heading h2 { font-size: 36px; }
+  .advantage-heading p { font-size: 15px; }
+  .advantage-grid { grid-template-columns: 1fr; }
+  .advantage-grid article { min-height: auto; padding: 28px 24px; }
+  .advantage-grid h3 { margin-top: 28px; }
   .release-copy { padding-bottom: 56px; }
   .release-copy > p { font-size: 16px; }
   .release-actions { align-items: stretch; flex-direction: column; gap: 16px; }
