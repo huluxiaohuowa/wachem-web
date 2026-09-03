@@ -5,7 +5,7 @@
 
 ## 背景
 
-WA Chem 的自研 SVG 编辑器是产品核心资产。为支持「实时笔迹增量识别」与 Mac/iPad 原生画布（Swift/Metal 渲染），同时保持服务器 Web 版继续以浏览器渲染，需要把文档模型与渲染解耦，并让两端共享同一份核心实现（双端同步硬规则）。
+WA Chem 的自研 SVG 编辑器是产品核心资产。为支持「实时笔迹增量识别」与 Apple 端原生画布（Swift/Metal 渲染），同时保持服务器 Web 版继续以浏览器渲染，需要把文档模型与渲染解耦，并让两端共享同一份核心实现（双端同步硬规则）。
 
 ## 决策
 
@@ -14,7 +14,7 @@ WA Chem 的自研 SVG 编辑器是产品核心资产。为支持「实时笔迹�
 `apps/web/src/core/` 是唯一的编辑器实现（文档模型 + 命令/撤销 + 指针意图 + 空间查询 + 场景构建 + 快捷键映射），零 DOM 依赖：
 
 - **浏览器产物**：ESM，随 Vite 构建（`apps/web`）；
-- **Apple 产物**：`node build-core.mjs`（esbuild → IIFE → `dist-core/wa-chem-core.js`，全局名 `WAChemCore`），由 Mac/iPad 原生壳内嵌并在 **JavaScriptCore** 中执行（与 Safari 同引擎）。
+- **Apple 产物**：`node build-core.mjs`（esbuild → IIFE → `dist-core/wa-chem-core.js`，全局名 `WAChemCore`），由 Apple 端原生壳内嵌并在 **JavaScriptCore** 中执行（与 Safari 同引擎）。
 
 `core/bundle.smoke.test.ts` 在无 DOM 的 VM 沙箱执行产物，作为 JSCore 契约测试守护。
 
@@ -67,4 +67,4 @@ WA Chem 的自研 SVG 编辑器是产品核心资产。为支持「实时笔迹�
 - 浏览器行为零变化（62 个测试锁定，含交互意图、场景几何、撤销语义、快捷键映射）；
 - Metal 渲染器（M1）与 SVG 的视觉一致性由「同一 buildScene 输出」构造性保证，验收用金标场景对比；
 - M3 笔迹（strokes 实体）将作为 schema v3 在本契约上扩展（v2 已被 aromaticRings 占用）；
-- 多渲染器从此长期共存：这是对 §5.4 旧原则「不同时维护两套渲染器」的显式修订——所有渲染器共享一套场景构建器，维护面只剩渲染器本身；Mac 端当前生产渲染器为 Metal，CoreGraphics 为 PNG 导出和降级路径。
+- 多渲染器从此长期共存：这是对 §5.4 旧原则「不同时维护两套渲染器」的显式修订——所有渲染器共享一套场景构建器，维护面只剩渲染器本身；Apple app 当前生产渲染器为 Metal，CoreGraphics 为 PNG 导出和降级路径。
