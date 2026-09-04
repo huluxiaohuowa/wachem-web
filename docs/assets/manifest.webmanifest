@@ -5,22 +5,32 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "theme_color": "#087f83",
+  "theme_color": "#2563eb",
   "background_color": "#f6f8fb",
   "icons": [
     {
-      "src": "/wa-chem-logo.png",
+      "src": "/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/app-icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ],
   "file_handlers": [
     {
       "action": "/",
       "accept": {
-        "application/vnd.fuluwa.wa-chem": [".wachem"],
-        "application/json": [".wachem"]
+        "application/vnd.fuluwa.wa-chem": [
+          ".wachem"
+        ],
+        "application/json": [
+          ".wachem"
+        ]
       }
     }
   ]
