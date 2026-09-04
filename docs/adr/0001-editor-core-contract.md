@@ -9,14 +9,14 @@ WA Chem 的自研 SVG 编辑器是产品核心资产。为支持「实时笔迹�
 
 ## 决策
 
-### 1. 单一无头核心，两个编译产物
+### 1. Web core 与 Apple shared core
 
-`apps/web/src/core/` 是唯一的编辑器实现（文档模型 + 命令/撤销 + 指针意图 + 空间查询 + 场景构建 + 快捷键映射），零 DOM 依赖：
+`apps/web/src/core/` 是 Web 服务器版的编辑器核心（文档模型 + 命令/撤销 + 指针意图 + 空间查询 + 场景构建 + 快捷键映射），零 DOM 依赖：
 
-- **浏览器产物**：ESM，随 Vite 构建（`apps/web`）；
-- **Apple 产物**：`node build-core.mjs`（esbuild → IIFE → `dist-core/wa-chem-core.js`，全局名 `WAChemCore`），由 Apple 端原生壳内嵌并在 **JavaScriptCore** 中执行（与 Safari 同引擎）。
+- **Web 产物**：ESM，随 Vite 构建（`apps/web`）；
+- **Apple app**：不复用 Web runtime。Swift shared core 位于 `apps/apple-core/Sources/WAChemAppleCanvas`，渲染模块位于 `apps/apple-core/Sources/WAChemRender`。
 
-`core/bundle.smoke.test.ts` 在无 DOM 的 VM 沙箱执行产物，作为 JSCore 契约测试守护。
+两条运行线通过同一文档契约、同一交互语义和回归测试保持一致；不能通过 Web bundle 或运行时桥把 Web 当作 Apple app 的业务核心。
 
 ### 2. 文档契约（schema v1）
 
@@ -50,7 +50,7 @@ WA Chem 的自研 SVG 编辑器是产品核心资产。为支持「实时笔迹�
 
 `buildScene(state)`（`core/scene.ts`）输出类型化图元（line/polygon/polyline/circle/rect/text），分层 bonds → rings → draft → atoms → hover → marquee，**颜色、线宽、虚线、字体、光晕宽度全部在核心解析**（主题值收敛自旧 styles.css）。渲染器只做逐图元绘制，不做任何样式决策。样式开关（如 acs1996 方头线帽、字距 -0.02em）随图元携带。
 
-**渲染器落地（2026-09-01 修订）**：Mac 生产路径为 Metal（`WAChemRender.SceneRenderer`）；AppKit/CoreGraphics 直绘（`ScenePainter`）保留为 PNG 导出和降级路径。着色器源码以纯文件加载（运行时编译 MSL），不依赖 SwiftPM 资源包——曾因 `Bundle.module` 缺失导致启动即崩（v0.1.8 后修复）。
+**渲染器落地（2026-09-01 修订）**：Apple app 交互画布使用 Metal（`WAChemRender.SceneRenderer`）；CoreGraphics 直绘（`ScenePainter`）保留为 PNG/SVG 导出和 Metal 不可用或测试快照场景下的后备绘制。着色器源码以纯文件加载（运行时编译 MSL），不依赖 SwiftPM 资源包——曾因 `Bundle.module` 缺失导致启动即崩（v0.1.8 后修复）。
 
 ### 5. 输入：指针意图与快捷键纯函数
 
@@ -58,13 +58,13 @@ WA Chem 的自研 SVG 编辑器是产品核心资产。为支持「实时笔迹�
 - 命中测试在核心（`core/spatial.ts`）：原子优先于键（与旧 DOM 叠放次序一致），原子半径 `max(14, fontSize×0.5)`，键阈值 8（旧 bond-hit 描边半宽）；
 - 快捷键为纯函数 `shortcutAction(state, {key, meta, ctrl, shift})`，Web 键盘事件与原生 NSEvent 共用；空格平移由 `setSpacePan` 进入核心状态。
 
-### 6. 原生桥
+### 6. Apple shared core
 
-原生端不再经 WKWebView 字符串求值，而是在进程内 JSContext 直接调用 `EditorCore`（getDocument/setDocument/getMolBlock/newDocument/buildScene/dispatch），Swift `Codable` 结构镜像文档契约。Web 端 `window.__WA_CHEM_NATIVE__` 全局保留，绑定一次（方法读核心自身状态）。
+Apple app 不复用 Web 运行时；原生端的编辑、场景、导入导出和资产语义由 `WAChemAppleCanvas` / `WAChemRender` 的 Swift 模块实现。Web 服务器版保留自己的 TypeScript `EditorCore`，两条运行线通过同一文档契约、同一交互语义和回归测试保持一致。
 
 ## 后果
 
 - 浏览器行为零变化（62 个测试锁定，含交互意图、场景几何、撤销语义、快捷键映射）；
-- Metal 渲染器（M1）与 SVG 的视觉一致性由「同一 buildScene 输出」构造性保证，验收用金标场景对比；
+- Apple app Metal 渲染器与 Web SVG 的视觉一致性由「同一场景语义」构造性保证，验收用金标场景对比；
 - M3 笔迹（strokes 实体）将作为 schema v3 在本契约上扩展（v2 已被 aromaticRings 占用）；
-- 多渲染器从此长期共存：这是对 §5.4 旧原则「不同时维护两套渲染器」的显式修订——所有渲染器共享一套场景构建器，维护面只剩渲染器本身；Apple app 当前生产渲染器为 Metal，CoreGraphics 为 PNG 导出和降级路径。
+- 多渲染器从此长期共存：这是对 §5.4 旧原则「不同时维护两套渲染器」的显式修订——所有渲染器共享同一场景语义，维护面只剩渲染器本身；Apple app 当前交互渲染器为 Metal，CoreGraphics 为 PNG/SVG 导出和后备绘制路径。

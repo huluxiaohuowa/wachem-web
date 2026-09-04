@@ -61,9 +61,9 @@
 
 ## 已完成里程碑记录
 
-- **2026-09-01（v0.1.8）**：完整导入导出上线（Mol/SDF/SMILES/CDXML 双向 + SVG/PNG + wachem，格式自动识别，Web/Mac 同步）；悬停高亮层、电荷显示、苯环双画法、窗口级键盘语义（悬停优先）；修复 Bundle.module 启动崩溃（dead Metal 路径，v0.1.9 待发）。
+- **2026-09-01（v0.1.8）**：完整导入导出上线（Mol/SDF/SMILES/CDXML 双向 + SVG/PNG + wachem，格式自动识别，Web 与 Apple app 语义同步）；悬停高亮层、电荷显示、苯环双画法、窗口级键盘语义（悬停优先）；修复 Bundle.module 启动崩溃（dead Metal 路径，v0.1.9 待发）。
 - **2026-09-01（交互回归轮）**：建立画布坐标换算测试，Web 用 rect/viewBox 确定性换算替代 SVG CTM；修复选中骨架碳强制显示导致的字母跳动；框选片段可从选中的键上直接拖动；空格平移改为 keyup 才退出，鼠标松开不再提前清除手掌状态；Apple app 系统菜单补齐“复制为 SMILES”。
-- **此前（M1）**：共享无头核心抽取（schema v1→v2）、Apple app 原生画布（Metal 生产渲染 + JSCore 宿主，CoreGraphics 导出/降级）、ChemDraw 交互子集（l=Cl/b=Br/n+a=Na 键入、链工具、环拖拽定尺寸、双击选片段、Option-拖拽复制、橡皮擦）。
+- **此前（M1）**：共享无头核心抽取（schema v1→v2）、Apple app 原生画布（Metal 交互渲染，CoreGraphics 导出/后备绘制）、ChemDraw 交互子集（l=Cl/b=Br/n+a=Na 键入、链工具、环拖拽定尺寸、双击选片段、Option-拖拽复制、橡皮擦）。
 
 ## 执行约定
 

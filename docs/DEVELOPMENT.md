@@ -21,19 +21,16 @@ docs/               ADR、对标清单、资产
 pnpm install
 pnpm dev
 
-# Web 核心 bundle（兼容/回归测试使用）
-pnpm --filter @wa-chem/web run build:core
-
 # API（使用现有 Python 环境）
 pip install -e '.[test]'
 uvicorn wa_chem_api.main:app --host 127.0.0.1 --port 8000
 
-# Apple app 直装调试包（构建并运行 dist/WA Chem.app）
+# Apple app 构建
 pnpm apple:build
 
 # 测试与类型检查
-pnpm test          # Web：核心 bundle 冒烟 + vitest
-swift test         # 原生：JSCore 契约 + 场景/渲染测试（在 apps/apple-core 下）
+pnpm test          # Web：vitest
+swift test --package-path apps/apple-core
 xcodebuild -project apps/apple/WAChemAppleApp.xcodeproj -scheme WAChemAppleApp -destination 'generic/platform=iOS Simulator' build
 xcodebuild -project apps/apple/WAChemAppleApp.xcodeproj -scheme WAChemAppleApp -destination 'platform=macOS,variant=Mac Catalyst' build
 ```
@@ -48,8 +45,8 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 
 ## 当前状态（2026-09-01）
 
-- 已完成：共享无头核心（schema v2）、Apple app 原生画布（Metal，CoreGraphics 降级/导出）、完整导入导出（Mol/SDF/SMILES/CDXML/SVG/PNG/wachem）、ChemDraw 交互子集（悬停键入/电荷/链/环拖拽/双击选片段/Option 拖拽复制）；
-- 测试基线：Web 89 个（vitest + 核心 bundle 冒烟）、原生 14 个（swift test）；
+- 已完成：共享无头核心（schema v2）、Apple app 原生画布（Metal，CoreGraphics 后备绘制/导出）、完整导入导出（Mol/SDF/SMILES/CDXML/SVG/PNG/wachem）、ChemDraw 交互子集（悬停键入/电荷/链/环拖拽/双击选片段/Option 拖拽复制）；
+- 测试基线：Web 124 个（vitest）、Apple shared core 115 个 XCTest + 15 个 Swift Testing，并用 `scripts/check_runtime_lines.py` 阻止旧桌面壳、旧网页桥、旧脚本桥和分裂 Apple 产品壳回流；
 - 已发布：v0.1.8（GitHub Release，含签名公证 DMG）；v0.1.9 待发（含 Bundle.module 启动崩溃修复）；
 - 进行中：Apple app 共享产品层收敛、就地原子标签编辑、价态校验计入电荷（对标清单 P0）。
 
@@ -68,7 +65,7 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 
 - 独立服务器版统一从宿主机 `8799` 提供访问（避开 WA-DD 默认 `8800`）；API 不直接暴露宿主机端口；
 - 模型目录通过 `MODEL_HUB_SHARED_MODELS_PATH` 挂载到容器内 `/modelhub`；服务器端 OCSR 默认模型 `ms://huluxiaohuowa/wa-chem-ocsr-molparser-mobile`（PyTorch / CUDA），由独立 `wa-chem-ocsr` worker 加载，API 只代理统一识别协议；worker 镜像构建可设置 `WA_CHEM_OCSR_BUNDLE_MODEL=true` 在构建期从 ModelScope 下载并校验模型；默认 PyTorch 模型包走内置 MolParser-Mobile runner，其他模型包必须按 [OCSR 模型包合同](ocsr-model-contract.md) 声明 runner 和输出 JSON；VOS/Web 的模型下载、同步和资产化入口复用通用 Model Hub 管理方式，通过 `MODEL_HUB_API_URL` 与 `MODEL_HUB_SHARED_MODELS_PATH` 交互；Apple app 使用同版本 Core ML 产物 `ms://huluxiaohuowa/wa-chem-ocsr-molparser-mobile-coreml`，作为 app 资源或已校验的本地模型路径加载；
-- `deploy/` 独立部署自动发现本机 `wa-dd-*` Docker 网络，并把 WA Chem Web/API/OCSR 都接入同一个 WA-DD 网络；同网络内用 WA-DD 提供的稳定 DNS alias `wa-dd-web:8800` 访问。未发现本机 WA-DD 网络时，API 容器把 `wa-dd-web` 映射到 `host-gateway`，因此宿主机已发布 8800 端口时仍可在界面输入 `wa-dd-web` 或 `wa-dd-web:8800` 添加服务器；
+- `deploy/` 独立部署固定接入外部 Docker 网络 `wa-dd`，不按 profile 推导或自动发现 `wa-dd-*` 网络；同网络内用 WA-DD 提供的稳定 DNS alias `wa-dd-web:8800` 访问；
 - `ictrek.app/` VOS 部署只接入 `vos_default`，WA-DD 的 VOS Web 服务同样通过 `wa-dd-web:8800` 这个 Docker DNS 名称访问；
 - VAI / VOS 适配（`ictrek.app`）在独立部署验收后启用，必须显式开启，不影响独立部署的登录/注册/管理员流程。
 
