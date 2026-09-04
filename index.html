@@ -82,7 +82,7 @@
         </div>
       </section>
 
-      <section class="experience-section" id="interface" data-device="mac" aria-label="Mac 与 iPad 原生统一体验" data-i18n-aria="nativeExperience">
+      <section class="experience-section" id="interface" data-device="mac" aria-label="Mac、iPad 与 Web 使用体验" data-i18n-aria="nativeExperience">
         <span class="anchor-target" id="platform" aria-hidden="true"></span>
         <div class="experience-toolbar">
           <div class="experience-tabs" role="tablist" aria-label="切换设备界面" data-i18n-aria="deviceSwitcher">
@@ -94,13 +94,17 @@
               <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2" /><path d="M10 18.5h4" /></svg>
               <span>iPad</span>
             </button>
+            <button id="tab-web" type="button" role="tab" aria-selected="false" aria-controls="panel-web" tabindex="-1" data-experience-tab="web" data-i18n-aria="showWeb">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1.5" /><path d="M3 8h18M7 6h.01M10 6h.01" /></svg>
+              <span>Web</span>
+            </button>
           </div>
           <div class="experience-status">
             <button class="experience-autoplay" type="button" data-experience-autoplay aria-label="暂停自动轮播" title="暂停自动轮播" data-i18n-aria="pauseCarousel" data-i18n-title="pauseCarousel">
               <svg class="experience-pause-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 6v12M16 6v12" /></svg>
               <svg class="experience-play-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 9 6-9 6Z" /></svg>
             </button>
-            <span class="experience-counter"><strong data-experience-counter>01</strong> / 02</span>
+            <span class="experience-counter"><strong data-experience-counter>01</strong> / 03</span>
           </div>
         </div>
 
@@ -145,6 +149,28 @@
                 loading="lazy"
               />
               <figcaption data-i18n="ipadCaption">iPad 原生界面 · 与 Mac 共享产品逻辑</figcaption>
+            </figure>
+          </article>
+
+          <article class="experience-panel" id="panel-web" role="tabpanel" aria-labelledby="tab-web" aria-hidden="true" inert data-experience-panel="web">
+            <div class="experience-copy">
+              <h2 data-i18n="webExperienceTitle">随时进入 Web 工作台</h2>
+              <p data-i18n="webExperienceBody">在浏览器中完成结构绘制、图像识别与 SDF 资产管理，并连接 WA-DD 延续配体结构工作流。</p>
+              <div class="experience-facts">
+                <span data-i18n="browserAccess">浏览器访问</span>
+                <span data-i18n="serverPowered">服务器算力</span>
+              </div>
+            </div>
+            <figure class="experience-media experience-media-web">
+              <img
+                src="assets/editor-web.webp"
+                alt="WA Chem Web 版化学结构编辑器与资产管理界面"
+                data-i18n-alt="webExperienceAlt"
+                width="2200"
+                height="1019"
+                loading="lazy"
+              />
+              <figcaption data-i18n="webExperienceCaption">Web 工作台 · 服务器算力</figcaption>
             </figure>
           </article>
         </div>

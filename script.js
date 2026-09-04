@@ -15,10 +15,11 @@ const translations = {
     releasePending: "首个公开版本准备中",
     heroAlt: "WA Chem 中由 AI 辅助识别与编辑化学结构的理念图",
     productFlow: "WA Chem 核心流程",
-    nativeExperience: "Mac 与 iPad 原生统一体验",
+    nativeExperience: "Mac、iPad 与 Web 使用体验",
     deviceSwitcher: "切换设备界面",
     showMac: "显示 Mac 界面",
     showIpad: "显示 iPad 界面",
+    showWeb: "显示 Web 界面",
     pauseCarousel: "暂停自动轮播",
     playCarousel: "继续自动轮播",
     nativeRendering: "原生 SwiftUI + Metal",
@@ -53,6 +54,12 @@ const translations = {
     serverComputeBody: "模型由部署 WA Chem 的服务器运行，浏览器负责连接与操作。",
     ipadAlt: "WA Chem 在 iPad 上运行的原生编辑器界面",
     ipadCaption: "iPad 原生界面 · 与 Mac 共享产品逻辑",
+    webExperienceTitle: "随时进入 Web 工作台",
+    webExperienceBody: "在浏览器中完成结构绘制、图像识别与 SDF 资产管理，并连接 WA-DD 延续配体结构工作流。",
+    browserAccess: "浏览器访问",
+    serverPowered: "服务器算力",
+    webExperienceAlt: "WA Chem Web 版化学结构编辑器与资产管理界面",
+    webExperienceCaption: "Web 工作台 · 服务器算力",
     getWaChem: "获取 WA Chem",
     releaseBody: "发布包将通过 GitHub Releases 提供。每个版本都包含变更说明、校验信息和对应平台的下载文件。",
     goToReleases: "前往 Releases",
@@ -99,10 +106,11 @@ const translations = {
     releasePending: "First public release in preparation",
     heroAlt: "Concept artwork showing AI-assisted chemical structure recognition and editing in WA Chem",
     productFlow: "WA Chem core workflow",
-    nativeExperience: "Unified native experience on Mac and iPad",
+    nativeExperience: "WA Chem experience across Mac, iPad, and Web",
     deviceSwitcher: "Switch device interface",
     showMac: "Show the Mac interface",
     showIpad: "Show the iPad interface",
+    showWeb: "Show the Web interface",
     pauseCarousel: "Pause automatic carousel",
     playCarousel: "Resume automatic carousel",
     nativeRendering: "Native SwiftUI + Metal",
@@ -137,6 +145,12 @@ const translations = {
     serverComputeBody: "Models run on the server where WA Chem is deployed, while the browser provides access and interaction.",
     ipadAlt: "The native WA Chem editor running on iPad",
     ipadCaption: "Native iPad interface · Shared product logic with Mac",
+    webExperienceTitle: "Open the full Web workspace anywhere",
+    webExperienceBody: "Draw structures, recognize images, manage SDF assets, and connect to WA-DD from the browser to continue ligand workflows.",
+    browserAccess: "Browser access",
+    serverPowered: "Server compute",
+    webExperienceAlt: "The WA Chem Web editor and asset management workspace",
+    webExperienceCaption: "Web workspace · Server compute",
     getWaChem: "Get WA Chem",
     releaseBody: "Packages are distributed through GitHub Releases. Each version includes release notes, checksums, and platform-specific downloads.",
     goToReleases: "Go to Releases",
@@ -273,7 +287,8 @@ function applyLanguage(language) {
 }
 
 function selectExperience(device, moveFocus = false) {
-  if (device !== "mac" && device !== "ipad") return;
+  const activeIndex = experienceTabs.findIndex((tab) => tab.dataset.experienceTab === device);
+  if (activeIndex < 0) return;
   experienceSection.dataset.device = device;
   experienceTabs.forEach((tab) => {
     const isActive = tab.dataset.experienceTab === device;
@@ -287,7 +302,7 @@ function selectExperience(device, moveFocus = false) {
     panel.setAttribute("aria-hidden", String(!isActive));
     panel.inert = !isActive;
   });
-  experienceCounter.textContent = device === "mac" ? "01" : "02";
+  experienceCounter.textContent = String(activeIndex + 1).padStart(2, "0");
 }
 
 function stopExperienceAutoplay() {
@@ -299,8 +314,8 @@ function scheduleExperienceAutoplay() {
   stopExperienceAutoplay();
   if (!experienceInView || experienceTemporarilyPaused || experienceUserPaused || reduceMotionQuery.matches || document.hidden) return;
   experienceAutoplayTimer = window.setTimeout(() => {
-    const nextDevice = experienceSection.dataset.device === "mac" ? "ipad" : "mac";
-    selectExperience(nextDevice);
+    const activeIndex = experienceTabs.findIndex((tab) => tab.dataset.experienceTab === experienceSection.dataset.device);
+    selectExperience(experienceTabs[(activeIndex + 1) % experienceTabs.length].dataset.experienceTab);
     scheduleExperienceAutoplay();
   }, experienceAutoplayDelay);
 }
