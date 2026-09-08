@@ -88,5 +88,7 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 | `APP_STORE_CONNECT_API_KEY_ID` | App Store Connect API Key ID |
 | `APP_STORE_CONNECT_API_ISSUER_ID` | App Store Connect Issuer ID |
 | `APP_STORE_CONNECT_API_PRIVATE_KEY` | App Store Connect `.p8` 私钥全文 |
+| `IOS_APP_STORE_PROVISIONING_PROFILE` | `WA Chem App Store iOS` profile 的 base64 内容 |
+| `MAC_CATALYST_APP_STORE_PROVISIONING_PROFILE` | `WA Chem App Store Mac Catalyst` profile 的 base64 内容 |
 
 未配置 Developer ID 凭据时仍会生成 DMG，但下载后可能被 Gatekeeper 拦截。App Store 上传凭据是 Release workflow 的必需项；在使用 `--submit-app-store` 前，还需在 App Store Connect 填完当前版本的应用隐私、年龄分级、一次性下载价格/可用范围、审核联系信息、描述与截图等必填内容。不要为 App Store 版创建内购商品。
