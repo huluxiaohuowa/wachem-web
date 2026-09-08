@@ -43,12 +43,13 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 
 每次实现新增产品行为时，验收顺序固定为：共享化学/资产语义 → Web 入口 → Apple app 入口 → 同一用户场景验证。只完成局部按钮、单个系统输入适配或单条运行线外观，不算完成。
 
-## 当前状态（2026-09-01）
+## 当前状态（2026-09-07）
 
-- 已完成：共享无头核心（schema v2）、Apple app 原生画布（Metal，CoreGraphics 后备绘制/导出）、完整导入导出（Mol/SDF/SMILES/CDXML/SVG/PNG/wachem）、ChemDraw 交互子集（悬停键入/电荷/链/环拖拽/双击选片段/Option 拖拽复制）；
-- 测试基线：Web 124 个（vitest）、Apple shared core 115 个 XCTest + 15 个 Swift Testing，并用 `scripts/check_runtime_lines.py` 阻止旧桌面壳、旧网页桥、旧脚本桥和分裂 Apple 产品壳回流；
-- 已发布：v0.1.8（GitHub Release，含签名公证 DMG）；v0.1.9 待发（含 Bundle.module 启动崩溃修复）；
-- 进行中：Apple app 共享产品层收敛、就地原子标签编辑、价态校验计入电荷（对标清单 P0）。
+- 已完成：共享无头核心（schema v2）、Apple app 原生画布（Metal，CoreGraphics 后备绘制/导出）、完整导入导出（Mol/SDF/SMILES/CDXML/CDX 导入、RXN 导出、SVG/PNG/wachem）、ChemDraw 交互子集与绘图进阶项（原子标签就地编辑、价态校验/自由基、反应箭头/轨道/整理反应式、内置模板库、套索/旋转/缩放、SMILES 方向键与 E-Z 几何推导）、中英双语界面（Web 顶栏切换、Apple 跟随系统 per-app 语言）、图片识别统一入口与 Apple Pencil 草图识别、画布自适应缩放；
+- 资产与联动：本地 SDF 分子库多资产管理、WA-DD 项目浏览/载入与新建/追加/替换写入、iCloud 与 Keychain 策略、VOS 应用包发布；
+- 测试基线：Web 183 个（vitest，2026-09-07 实测全过）、Apple shared core 156 个 XCTest + 19 个 Swift Testing，并用 `scripts/check_runtime_lines.py` 阻止旧桌面壳、旧网页桥、旧脚本桥和分裂 Apple 产品壳回流；
+- 已发布：v0.1.57（GitHub Release，含签名公证 DMG、独立部署包与 VOS 应用包）；
+- 进行中：低置信度识别纠错叠加界面（按冻结集评测结果完善）、App Store 上架流程。
 
 ## 版本与发版
 
