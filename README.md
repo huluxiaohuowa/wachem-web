@@ -46,7 +46,7 @@ WA Chem 在 Mac 与 iPad 上使用同一套原生 Apple 应用、共享同一套
 
 ### Apple app
 
-Apple app 是同一个原生产品目标，面向 iPad 与 Mac 一次上架。开发/测试阶段仍可从 [WA Chem 公开下载页](https://wa-chem.fuluwa.top/#releases) 获取 `wa-chem-apple_<version>_aarch64.dmg` 直装包；App Store 渠道使用同一 bundle id `top.fuluwa.wa-chem`。本地资产与 WA-DD 连接信息走 Apple 账户文件夹与 iCloud 同步开关；WA-DD 凭据保存在系统钥匙串。
+Apple app 是同一个原生产品目标，面向 iPhone、iPad 与 Mac 一次上架。用户可以从 [WA Chem 公开下载页](https://wa-chem.fuluwa.top/#releases) 免费获取功能完整的 `wa-chem-apple_<version>_aarch64.dmg` 直装包，也可以在 App Store 一次性付费下载；两个渠道不使用内购或功能锁，App Store 渠道使用同一 bundle id `top.fuluwa.wa-chem`。本地资产与 WA-DD 连接信息走 Apple 账户文件夹与 iCloud 同步开关；WA-DD 凭据保存在系统钥匙串。
 
 ### 服务器版（自托管）
 
@@ -62,7 +62,7 @@ Apple app 是同一个原生产品目标，面向 iPad 与 Mac 一次上架。�
 
 | 平台 | 形态 |
 | --- | --- |
-| Apple app（iPad + Mac） | 一个原生 Apple app 目标；共享 SwiftUI + Metal 画布、资产、WA-DD、iCloud、Keychain 与编辑语义 |
+| Apple app（iPhone + iPad + Mac） | 一个原生 Apple app 目标；共享 SwiftUI + Metal 画布、资产、WA-DD、iCloud、Keychain 与编辑语义 |
 | 浏览器 | 服务器版 Web 应用 |
 
 Apple app 与 Web 版是两条运行线，但用户可见的化学绘制、资产与 WA-DD 语义必须保持一致。

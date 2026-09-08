@@ -37,7 +37,7 @@ xcodebuild -project apps/apple/WAChemAppleApp.xcodeproj -scheme WAChemAppleApp -
 
 ## 运行线同步约定
 
-Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格式转换、WA-DD 联动和模型管理不能只在一条运行线完成。Apple app 是一个统一产品和一个 App Store 目标，支持 iPad 与 Mac Catalyst；桌面/触控只允许作为系统输入与系统文件能力适配入口。文档、资产、WA-DD、iCloud、Keychain、选择、撤销、导入导出等业务状态必须在共享 Apple 模块中实现一次。交互语义以 [ChemDraw / InDraw 对标清单](chemdraw-parity.md)为准。
+Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格式转换、WA-DD 联动和模型管理不能只在一条运行线完成。Apple app 是一个统一产品和一个 App Store 目标，支持 iPhone、iPad 与 Mac Catalyst；桌面/触控只允许作为系统输入与系统文件能力适配入口。文档、资产、WA-DD、iCloud、Keychain、选择、撤销、导入导出等业务状态必须在共享 Apple 模块中实现一次。交互语义以 [ChemDraw / InDraw 对标清单](chemdraw-parity.md)为准。
 
 资产、账户归属、WA-DD 连接与 SDF 追加/导出粒度以 [资产、账户与 SDF 交互模型](asset-account-model.md) 为准。
 
@@ -60,7 +60,7 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 - `wa-chem-apple_<version>_aarch64.dmg`：Apple app 开发直装/公证包；App Store 渠道使用 `apps/apple` 的 Universal Apple app target；
 - `SHA256SUMS`：产物校验和。
 
-推送 `vX.Y.Z` tag 触发 Release workflow 自动构建并发布产物。
+推送 `vX.Y.Z` tag 触发 Release workflow 自动构建并发布产物，同时将同一 Apple target 的 iPhone/iPad 与 Mac Catalyst 构建上传到 App Store Connect/TestFlight。`./update_version.sh patch --submit-app-store` 会在上传成功后继续将 iOS 和 macOS 版本提交审核；不带该选项时只上传、不提审。Developer ID 签名与公证的 DMG 仍是永久免费、功能完整的独立分发链；App Store 版采用整款应用一次性付费下载，不使用 StoreKit 内购或渠道功能锁。
 
 ## 部署要点
 
@@ -83,5 +83,10 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 | `APPLE_PASSWORD` | Apple ID 的 app-specific password |
 | `APPLE_TEAM_ID` | Apple Developer Team ID |
 | `KEYCHAIN_PASSWORD` | CI 临时 keychain 密码 |
+| `APPLE_DISTRIBUTION_CERTIFICATE` | Apple Distribution `.p12` 的 base64 内容，用于 App Store 归档 |
+| `APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD` | Apple Distribution `.p12` 的导出密码 |
+| `APP_STORE_CONNECT_API_KEY_ID` | App Store Connect API Key ID |
+| `APP_STORE_CONNECT_API_ISSUER_ID` | App Store Connect Issuer ID |
+| `APP_STORE_CONNECT_API_PRIVATE_KEY` | App Store Connect `.p8` 私钥全文 |
 
-未配置时仍会生成 DMG，但下载后可能被 Gatekeeper 拦截。
+未配置 Developer ID 凭据时仍会生成 DMG，但下载后可能被 Gatekeeper 拦截。App Store 上传凭据是 Release workflow 的必需项；在使用 `--submit-app-store` 前，还需在 App Store Connect 填完当前版本的应用隐私、年龄分级、一次性下载价格/可用范围、审核联系信息、描述与截图等必填内容。不要为 App Store 版创建内购商品。

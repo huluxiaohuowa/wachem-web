@@ -13,9 +13,9 @@
 
 ## Apple App Store 交付
 
-- Apple app 按同一个 App Store Connect 产品管理，用户购买/获取一次后可在 Apple 设备上使用。
+- Apple app 按同一个 App Store Connect 产品管理，App Store 版采用整款应用一次性付费下载，不使用内购或功能锁；用户购买后可在 Apple 设备上使用。
 - Apple app 必须使用同一个 `top.fuluwa.wa-chem` Bundle ID 命名空间；版本号必须由 `update_version.sh` 同步，不允许手工维护两个不一致的版本。
-- 本地直装/公证包和 App Store 包可以使用不同签名与分发流程，但文档格式、资产语义、WA-DD 连接语义和 About 版本显示必须一致。
+- GitHub 发布的本地直装/公证包永久免费且功能完整；它和 App Store 包可以使用不同签名与分发流程，但不得按渠道限制 iCloud、SDF 导出或其他产品功能，文档格式、资产语义、WA-DD 连接语义和 About 版本显示必须一致。
 - App Store 版必须启用 `iCloud.top.fuluwa.wa-chem` iCloud Documents entitlement，并保留未登录 iCloud 或未开启 iCloud Drive 时的本机 fallback。
 
 ## 资产层级
