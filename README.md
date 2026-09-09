@@ -6,14 +6,20 @@
 
 **WA Chem** 专注做好一件事：把画二维化学结构做到像 ChemDraw 一样快速、顺手。它是一个轻量的本地工作台，开箱即用、数据留在本地，并可接入 [WA-DD](https://wa-dd.fuluwa.top) 进行配体结构编辑管理。
 
-![WA Chem 编辑器](docs/assets/editor-main.jpg)
+### 从绘制、识别到资产管理
+
+<p align="center">
+  <img src="docs/assets/showcase/mac-draw-cn.webp" alt="WA Chem 在 Mac 上绘制化学结构" width="32%">
+  <img src="docs/assets/showcase/mac-recognize-cn.webp" alt="WA Chem 在 Mac 上识别化学结构" width="32%">
+  <img src="docs/assets/showcase/mac-assets-cn.webp" alt="WA Chem 在 Mac 上管理分子资产" width="32%">
+</p>
 
 ### Mac 与 iPad，统一原生体验
 
 WA Chem 在 Mac 与 iPad 上使用同一套原生 Apple 应用、共享同一套编辑器与资产管理逻辑；界面会针对键鼠、触控和 Apple Pencil 自然适配，不需要在两个产品之间切换。
 
 <p align="center">
-  <img src="docs/assets/editor-ipad.webp" alt="WA Chem 在 iPad 上运行的原生编辑器界面" width="640">
+  <img src="docs/assets/showcase/ipad-draw-cn.webp" alt="WA Chem 在 iPad 上使用触控与 Apple Pencil 绘制化学结构" width="520">
 </p>
 
 ## 主要功能
