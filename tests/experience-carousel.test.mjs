@@ -7,7 +7,7 @@ test("experience carousel tabs and panels stay in sync", () => {
   const tabs = [...html.matchAll(/data-experience-tab="([^"]+)"/g)].map((match) => match[1]);
   const panels = [...html.matchAll(/data-experience-panel="([^"]+)"/g)].map((match) => match[1]);
 
-  assert.deepEqual(tabs, ["mac", "ipad", "web"]);
+  assert.deepEqual(tabs, ["draw", "recognize", "assets", "ipad", "web"]);
   assert.deepEqual(panels, tabs);
-  assert.match(html, /data-experience-counter>01<\/strong> \/ 03/);
+  assert.match(html, /data-experience-counter>01<\/strong> \/ 05/);
 });

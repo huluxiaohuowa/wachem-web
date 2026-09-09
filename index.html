@@ -82,13 +82,21 @@
         </div>
       </section>
 
-      <section class="experience-section" id="interface" data-device="mac" aria-label="Mac、iPad 与 Web 使用体验" data-i18n-aria="nativeExperience">
+      <section class="experience-section" id="interface" data-device="draw" aria-label="Mac、iPad 与 Web 使用体验" data-i18n-aria="nativeExperience">
         <span class="anchor-target" id="platform" aria-hidden="true"></span>
         <div class="experience-toolbar">
           <div class="experience-tabs" role="tablist" aria-label="切换设备界面" data-i18n-aria="deviceSwitcher">
-            <button id="tab-mac" type="button" role="tab" aria-selected="true" aria-controls="panel-mac" data-experience-tab="mac" data-i18n-aria="showMac">
+            <button id="tab-draw" type="button" role="tab" aria-selected="true" aria-controls="panel-draw" data-experience-tab="draw" data-i18n-aria="showDraw">
               <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5" /><path d="M8 20h8M12 16v4" /></svg>
-              <span>Mac</span>
+              <span data-i18n="drawTab">绘制</span>
+            </button>
+            <button id="tab-recognize" type="button" role="tab" aria-selected="false" aria-controls="panel-recognize" tabindex="-1" data-experience-tab="recognize" data-i18n-aria="showRecognize">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4" /><circle cx="12" cy="12" r="3" /></svg>
+              <span data-i18n="recognizeTab">识别</span>
+            </button>
+            <button id="tab-assets" type="button" role="tab" aria-selected="false" aria-controls="panel-assets" tabindex="-1" data-experience-tab="assets" data-i18n-aria="showAssets">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h6l2 2h8v10H4Z" /><path d="M4 7V5h6l2 2" /></svg>
+              <span data-i18n="assetsTab">资产</span>
             </button>
             <button id="tab-ipad" type="button" role="tab" aria-selected="false" aria-controls="panel-ipad" tabindex="-1" data-experience-tab="ipad" data-i18n-aria="showIpad">
               <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2" /><path d="M10 18.5h4" /></svg>
@@ -104,29 +112,55 @@
               <svg class="experience-pause-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 6v12M16 6v12" /></svg>
               <svg class="experience-play-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 9 6-9 6Z" /></svg>
             </button>
-            <span class="experience-counter"><strong data-experience-counter>01</strong> / 03</span>
+            <span class="experience-counter"><strong data-experience-counter>01</strong> / 05</span>
           </div>
         </div>
 
         <div class="experience-panels">
-          <article class="experience-panel is-active" id="panel-mac" role="tabpanel" aria-labelledby="tab-mac" data-experience-panel="mac">
+          <article class="experience-panel is-active" id="panel-draw" role="tabpanel" aria-labelledby="tab-draw" data-experience-panel="draw">
             <div class="experience-copy">
               <h2 data-i18n="interfaceTitle">专注真实的绘制体验</h2>
-              <p data-i18n="interfaceBody">熟悉的元素、键型和结构属性集中在同一工作区。Mac 原生界面已支持 ACS 1996 文档样式。</p>
+              <p data-i18n="interfaceBody">元素、键型和结构属性集中在同一工作区，键鼠操作自然直接，并支持 ACS 1996 文档样式。</p>
               <div class="experience-facts">
                 <span data-i18n="nativeRendering">原生 SwiftUI + Metal</span>
               </div>
             </div>
             <figure class="experience-media experience-media-mac">
               <img
-                src="assets/editor-mac.webp"
+                src="assets/showcase/mac-draw-cn.webp"
+                data-i18n-src-zh-cn="assets/showcase/mac-draw-cn.webp"
+                data-i18n-src-en="assets/showcase/mac-draw-en.webp"
                 alt="WA Chem Mac 原生编辑器界面，画布使用 ACS 1996 文档样式"
                 data-i18n-alt="interfaceAlt"
                 width="2200"
-                height="1234"
+                height="1375"
                 loading="lazy"
               />
               <figcaption data-i18n="macCaption">Mac 原生界面 · ACS 1996 文档样式</figcaption>
+            </figure>
+          </article>
+
+          <article class="experience-panel" id="panel-recognize" role="tabpanel" aria-labelledby="tab-recognize" aria-hidden="true" inert data-experience-panel="recognize">
+            <div class="experience-copy">
+              <h2 data-i18n="recognizeTitle">从图片到可编辑结构</h2>
+              <p data-i18n="recognizeBody">导入截图、论文图片或手绘草图，在设备本地完成识别，再回到画布继续校正。</p>
+              <div class="experience-facts"><span data-i18n="onDeviceRecognition">设备端识别</span></div>
+            </div>
+            <figure class="experience-media experience-media-mac">
+              <img src="assets/showcase/mac-recognize-cn.webp" data-i18n-src-zh-cn="assets/showcase/mac-recognize-cn.webp" data-i18n-src-en="assets/showcase/mac-recognize-en.webp" alt="WA Chem 在 Mac 上把图片识别为可编辑化学结构" data-i18n-alt="recognizeAlt" width="2200" height="1375" loading="lazy" />
+              <figcaption data-i18n="recognizeCaption">Mac 原生界面 · 图片与手绘识别</figcaption>
+            </figure>
+          </article>
+
+          <article class="experience-panel" id="panel-assets" role="tabpanel" aria-labelledby="tab-assets" aria-hidden="true" inert data-experience-panel="assets">
+            <div class="experience-copy">
+              <h2 data-i18n="assetsTitle">结构与项目井然有序</h2>
+              <p data-i18n="assetsBody">用本地 SDF 资产组织常用分子，并与 WA-DD 项目衔接，随时载入、追加或导出。</p>
+              <div class="experience-facts"><span data-i18n="localAssets">本地 SDF 资产</span><span>WA-DD</span></div>
+            </div>
+            <figure class="experience-media experience-media-mac">
+              <img src="assets/showcase/mac-assets-cn.webp" data-i18n-src-zh-cn="assets/showcase/mac-assets-cn.webp" data-i18n-src-en="assets/showcase/mac-assets-en.webp" alt="WA Chem Mac 原生应用中的分子资产管理" data-i18n-alt="assetsAlt" width="2200" height="1375" loading="lazy" />
+              <figcaption data-i18n="assetsCaption">Mac 原生界面 · SDF 资产与 WA-DD</figcaption>
             </figure>
           </article>
 
@@ -141,11 +175,13 @@
             </div>
             <figure class="experience-media experience-media-ipad">
               <img
-                src="docs/assets/editor-ipad.webp"
+                src="assets/showcase/ipad-draw-cn.webp"
+                data-i18n-src-zh-cn="assets/showcase/ipad-draw-cn.webp"
+                data-i18n-src-en="assets/showcase/ipad-draw-en.webp"
                 alt="WA Chem 在 iPad 上运行的原生编辑器界面"
                 data-i18n-alt="ipadAlt"
-                width="1000"
-                height="1295"
+                width="1100"
+                height="1467"
                 loading="lazy"
               />
               <figcaption data-i18n="ipadCaption">iPad 原生界面 · 与 Mac 共享产品逻辑</figcaption>

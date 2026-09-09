@@ -17,9 +17,14 @@ const translations = {
     productFlow: "WA Chem 核心流程",
     nativeExperience: "Mac、iPad 与 Web 使用体验",
     deviceSwitcher: "切换设备界面",
-    showMac: "显示 Mac 界面",
+    showDraw: "显示结构绘制",
+    showRecognize: "显示结构识别",
+    showAssets: "显示资产管理",
     showIpad: "显示 iPad 界面",
     showWeb: "显示 Web 界面",
+    drawTab: "绘制",
+    recognizeTab: "识别",
+    assetsTab: "资产",
     pauseCarousel: "暂停自动轮播",
     playCarousel: "继续自动轮播",
     nativeRendering: "原生 SwiftUI + Metal",
@@ -33,8 +38,18 @@ const translations = {
     saveExchange: "保存与交换",
     saveExchangeBody: "在同一工作区完成保存、格式导入导出与后续计算。",
     interfaceTitle: "专注真实的绘制体验",
-    interfaceBody: "熟悉的元素、键型和结构属性集中在同一工作区。Mac 原生界面已支持 ACS 1996 文档样式。",
+    interfaceBody: "元素、键型和结构属性集中在同一工作区，键鼠操作自然直接，并支持 ACS 1996 文档样式。",
     interfaceAlt: "WA Chem Mac 原生编辑器界面，画布使用 ACS 1996 文档样式",
+    recognizeTitle: "从图片到可编辑结构",
+    recognizeBody: "导入截图、论文图片或手绘草图，在设备本地完成识别，再回到画布继续校正。",
+    onDeviceRecognition: "设备端识别",
+    recognizeAlt: "WA Chem 在 Mac 上把图片识别为可编辑化学结构",
+    recognizeCaption: "Mac 原生界面 · 图片与手绘识别",
+    assetsTitle: "结构与项目井然有序",
+    assetsBody: "用本地 SDF 资产组织常用分子，并与 WA-DD 项目衔接，随时载入、追加或导出。",
+    localAssets: "本地 SDF 资产",
+    assetsAlt: "WA Chem Mac 原生应用中的分子资产管理",
+    assetsCaption: "Mac 原生界面 · SDF 资产与 WA-DD",
     advantageTitle: "围绕你的数据，做一套真正原生的工作台",
     advantageBody: "从设备内的数据归属，到跨设备协作与资产组织，WA Chem 的产品逻辑为长期研究工作而设计。",
     dataOwnership: "数据自主",
@@ -109,9 +124,14 @@ const translations = {
     productFlow: "WA Chem core workflow",
     nativeExperience: "WA Chem experience across Mac, iPad, and Web",
     deviceSwitcher: "Switch device interface",
-    showMac: "Show the Mac interface",
+    showDraw: "Show structure drawing",
+    showRecognize: "Show structure recognition",
+    showAssets: "Show asset management",
     showIpad: "Show the iPad interface",
     showWeb: "Show the Web interface",
+    drawTab: "Draw",
+    recognizeTab: "Recognize",
+    assetsTab: "Assets",
     pauseCarousel: "Pause automatic carousel",
     playCarousel: "Resume automatic carousel",
     nativeRendering: "Native SwiftUI + Metal",
@@ -125,8 +145,18 @@ const translations = {
     saveExchange: "Save and exchange",
     saveExchangeBody: "Save, import, export, and continue downstream work from one workspace.",
     interfaceTitle: "A focused drawing experience",
-    interfaceBody: "Elements, bond types, and structure properties stay together in one workspace. The native Mac interface supports the ACS 1996 document style.",
+    interfaceBody: "Elements, bond types, and structure properties stay together in one workspace, with direct keyboard and pointer controls and ACS 1996 document styling.",
     interfaceAlt: "Native WA Chem editor on Mac with an ACS 1996 styled canvas",
+    recognizeTitle: "From image to editable structure",
+    recognizeBody: "Import a screenshot, paper figure, or hand-drawn sketch, recognize it on device, then refine it directly on the canvas.",
+    onDeviceRecognition: "On-device recognition",
+    recognizeAlt: "WA Chem recognizing an image as an editable chemical structure on Mac",
+    recognizeCaption: "Native Mac interface · Image and sketch recognition",
+    assetsTitle: "Keep structures and projects organized",
+    assetsBody: "Organize frequently used molecules as local SDF assets and connect them to WA-DD projects for loading, appending, and exporting.",
+    localAssets: "Local SDF assets",
+    assetsAlt: "Molecule asset management in the native WA Chem app on Mac",
+    assetsCaption: "Native Mac interface · SDF assets and WA-DD",
     advantageTitle: "A truly native workspace built around your data",
     advantageBody: "From data ownership on your devices to cross-device work and asset organization, WA Chem is designed for long-term research workflows.",
     dataOwnership: "Your data, your storage",
@@ -279,6 +309,9 @@ function applyLanguage(language) {
   document.querySelectorAll("[data-i18n-alt]").forEach((element) => {
     element.alt = text(element.dataset.i18nAlt);
   });
+  document.querySelectorAll("[data-i18n-src-zh-cn]").forEach((element) => {
+    element.src = language === "en" ? element.dataset.i18nSrcEn : element.dataset.i18nSrcZhCn;
+  });
   document.querySelectorAll("[data-i18n-content]").forEach((element) => {
     element.setAttribute("content", text(element.dataset.i18nContent));
   });
@@ -400,7 +433,7 @@ languageToggle.addEventListener("click", () => {
 });
 
 applyLanguage(activeLanguage);
-selectExperience("mac");
+selectExperience("draw");
 setExperienceUserPaused(false);
 
 fetch("https://api.github.com/repos/huluxiaohuowa/wachem-web/releases/latest", {
