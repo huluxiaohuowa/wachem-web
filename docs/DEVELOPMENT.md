@@ -60,7 +60,7 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 - `wa-chem-apple_<version>_aarch64.dmg`：Apple app 开发直装/公证包；App Store 渠道使用 `apps/apple` 的 Universal Apple app target；
 - `SHA256SUMS`：产物校验和。
 
-推送 `vX.Y.Z` tag 触发 Release workflow 自动构建并发布产物，同时将同一 Apple target 的 iPhone/iPad 与 Mac Catalyst 构建上传到 App Store Connect/TestFlight。`./update_version.sh patch --submit-app-store` 会在上传成功后继续将 iOS 和 macOS 版本提交审核；不带该选项时只上传、不提审。Developer ID 签名与公证的 DMG 仍是永久免费、功能完整的独立分发链；App Store 版采用整款应用一次性付费下载，不使用 StoreKit 内购或渠道功能锁。
+推送 `vX.Y.Z` tag 触发 Release workflow 自动构建并发布产物，同时将同一 Apple target 的 iPhone/iPad 与 Mac Catalyst 构建上传到 App Store Connect/TestFlight。`./update_version.sh patch --submit-app-store` 会在上传成功后继续将 iOS 和 macOS 版本提交审核，并在审核通过后自动发布；不带该选项时只上传、不提审。Developer ID 签名与公证的 DMG 仍是永久免费、功能完整的独立分发链；App Store 版采用整款应用一次性付费下载，不使用 StoreKit 内购或渠道功能锁。
 
 ## 部署要点
 
