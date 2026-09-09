@@ -170,6 +170,19 @@ footer { min-height: 126px; border-top: 1px solid var(--line); }
 footer .brand { font-size: 21px; }
 footer nav { gap: 34px; color: var(--blue); }
 
+.policy-page { max-width: 960px; margin: 0 auto; padding: 84px var(--gutter) 120px; }
+.policy-hero { padding-bottom: 64px; border-bottom: 1px solid var(--line); }
+.policy-hero > span { color: var(--blue); font-size: 12px; font-weight: 780; letter-spacing: 0.14em; text-transform: uppercase; }
+.policy-hero h1 { margin: 18px 0 22px; font-size: clamp(48px, 7vw, 76px); line-height: 1.04; letter-spacing: -0.055em; }
+.policy-hero h1 small { color: var(--muted); font-size: 0.48em; font-weight: 580; letter-spacing: -0.025em; }
+.policy-hero p { margin: 0; color: var(--muted); font-size: 14px; }
+.policy-content { padding: 70px 0 12px; }
+.policy-content + .policy-content { margin-top: 58px; border-top: 1px solid var(--line); }
+.policy-content h2 { margin: 0 0 42px; font-size: clamp(34px, 5vw, 48px); letter-spacing: -0.045em; }
+.policy-content h3 { margin: 34px 0 10px; font-size: 19px; letter-spacing: -0.02em; }
+.policy-content p { margin: 0; color: var(--ink-soft); font-size: 16px; line-height: 1.85; }
+.policy-content a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+
 @media (max-width: 1100px) {
   :root { --gutter: 30px; }
   .header-actions { gap: 20px; }
@@ -262,6 +275,9 @@ footer nav { gap: 34px; color: var(--blue); }
   .release-steps span, .release-steps svg, .release-steps strong { grid-row: 1; }
   footer { min-height: 148px; align-items: flex-start; flex-direction: column; justify-content: center; gap: 24px; }
   footer nav { gap: 24px; }
+  .policy-page { padding-top: 54px; padding-bottom: 84px; }
+  .policy-hero { padding-bottom: 46px; }
+  .policy-content { padding-top: 52px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
