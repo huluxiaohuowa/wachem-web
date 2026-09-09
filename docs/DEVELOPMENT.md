@@ -7,10 +7,13 @@
 ```
 apps/web            Web 前端与共享编辑器核心（src/core 为无头 TS 核心）
 apps/apple-core   Apple app 共享 Swift/Metal/测试模块与直装调试打包脚本
-apps/apple           Universal Apple app Xcode 目标（iPad + Mac Catalyst），依赖同一套共享 Apple 模块
+apps/apple           Universal Apple app Xcode 目标（iPhone + iPad + Mac Catalyst），依赖同一套共享 Apple 模块
 services/api        FastAPI 后端（账号、文档、识别编排）
+services/ocsr       wa-chem-ocsr 识别 worker（MolParser-Mobile runner + MolDet detector）
 deploy/             独立部署（Docker Compose）
 ictrek.app/         VOS 应用包模板
+scripts/            发版辅助脚本（TestFlight 上传分发、App Store 提审、模型同步、运行线守卫）
+script/             Apple app 直装调试构建脚本（build_and_run.sh）
 docs/               ADR、对标清单、资产
 ```
 
@@ -28,6 +31,9 @@ uvicorn wa_chem_api.main:app --host 127.0.0.1 --port 8000
 # Apple app 构建
 pnpm apple:build
 
+# Apple app 本地直装调试（独立 DerivedData 构建，杀掉旧实例后启动）
+script/build_and_run.sh
+
 # 测试与类型检查
 pnpm test          # Web：vitest
 swift test --package-path apps/apple-core
@@ -43,13 +49,14 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 
 每次实现新增产品行为时，验收顺序固定为：共享化学/资产语义 → Web 入口 → Apple app 入口 → 同一用户场景验证。只完成局部按钮、单个系统输入适配或单条运行线外观，不算完成。
 
-## 当前状态（2026-09-07）
+## 当前状态（2026-09-09）
 
-- 已完成：共享无头核心（schema v2）、Apple app 原生画布（Metal，CoreGraphics 后备绘制/导出）、完整导入导出（Mol/SDF/SMILES/CDXML/CDX 导入、RXN 导出、SVG/PNG/wachem）、ChemDraw 交互子集与绘图进阶项（原子标签就地编辑、价态校验/自由基、反应箭头/轨道/整理反应式、内置模板库、套索/旋转/缩放、SMILES 方向键与 E-Z 几何推导）、中英双语界面（Web 顶栏切换、Apple 跟随系统 per-app 语言）、图片识别统一入口与 Apple Pencil 草图识别、画布自适应缩放；
-- 资产与联动：本地 SDF 分子库多资产管理、WA-DD 项目浏览/载入与新建/追加/替换写入、iCloud 与 Keychain 策略、VOS 应用包发布；
-- 测试基线：Web 183 个（vitest，2026-09-07 实测全过）、Apple shared core 156 个 XCTest + 19 个 Swift Testing，并用 `scripts/check_runtime_lines.py` 阻止旧桌面壳、旧网页桥、旧脚本桥和分裂 Apple 产品壳回流；
-- 已发布：v0.1.57（GitHub Release，含签名公证 DMG、独立部署包与 VOS 应用包）；
-- 进行中：低置信度识别纠错叠加界面（按冻结集评测结果完善）、App Store 上架流程。
+- 已完成：共享无头核心（schema v2）、Apple app 原生画布（Metal，CoreGraphics 后备绘制/导出）、完整导入导出（Mol/SDF/SMILES/CDXML/CDX 导入、RXN 导出、SVG/PNG/wachem）、ChemDraw 交互子集与绘图进阶项（原子标签就地编辑、价态校验/自由基、反应箭头/轨道/整理反应式、内置模板库、套索/旋转/缩放、SMILES 方向键与 E-Z 几何推导）、中英双语界面（Web 顶栏切换、Apple 跟随系统 per-app 语言）、图片识别统一入口与 Apple Pencil 草图识别、画布自适应缩放、iPad 双指导航手势优先仲裁、原生原子/键手势与 Web 语义对齐；
+- 资产与联动：本地 SDF 分子库多资产管理、WA-DD 项目浏览/载入与新建/追加/替换写入、iCloud 与 Keychain 策略（设置中可开关 iCloud 存储）、Mac Catalyst App Sandbox、VOS 应用包发布；
+- App Store 交付：统一交付链已跑通——发版 tag 自动归档上传 iPhone/iPad 与 Mac 构建到 TestFlight（分发 internal / external 测试组并写入 What's New，外部组按需 Beta App Review），`--submit-app-store` 继续提交正式审核，审核通过后自动发布；首个 App Store 版本 v0.1.60 已于 2026-09-09 提交审核；
+- 测试基线：Web 183 个（vitest，2026-09-09 实测全过）、Apple shared core 162 个 XCTest + 19 个 Swift Testing（同日全过），并用 `scripts/check_runtime_lines.py` 阻止旧桌面壳、旧网页桥、旧脚本桥和分裂 Apple 产品壳回流；
+- 已发布：v0.1.60（GitHub Release，含签名公证 DMG、独立部署包与 VOS 应用包）；
+- 进行中：App Store 首版审核跟进、低置信度识别纠错叠加界面（按冻结集评测结果完善）。
 
 ## 版本与发版
 
@@ -60,7 +67,7 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 - `wa-chem-apple_<version>_aarch64.dmg`：Apple app 开发直装/公证包；App Store 渠道使用 `apps/apple` 的 Universal Apple app target；
 - `SHA256SUMS`：产物校验和。
 
-推送 `vX.Y.Z` tag 触发 Release workflow 自动构建并发布产物，同时将同一 Apple target 的 iPhone/iPad 与 Mac Catalyst 构建上传到 App Store Connect/TestFlight。`./update_version.sh patch --submit-app-store` 会在上传成功后继续将 iOS 和 macOS 版本提交审核，并在审核通过后自动发布；不带该选项时只上传、不提审。Developer ID 签名与公证的 DMG 仍是永久免费、功能完整的独立分发链；App Store 版采用整款应用一次性付费下载，不使用 StoreKit 内购或渠道功能锁。
+推送 `vX.Y.Z` tag 触发 Release workflow 自动构建并发布产物，同时将同一 Apple target 的 iPhone/iPad 与 Mac Catalyst 构建上传到 App Store Connect/TestFlight：构建会分发到 internal（`WA Chem Internal`）与 external（`WA Chem Beta Testers`）测试组并写入本地化 What's New；外部组构建按 App Store Connect 配置进入 Beta App Review；单个平台上传失败可在 workflow 中单独重试。`./update_version.sh patch --submit-app-store` 会在 tag 消息中写入 `App-Store-Submit: true` 标记，Release workflow 据此在上传成功后继续将 iOS 和 macOS 版本提交正式审核，并在审核通过后自动发布；提审的 What's New 由 `scripts/prepare_apple_release_notes.py` 从上一个成功提审版本以来的全部提交自动生成；不带该选项时只上传、不提审。Developer ID 签名与公证的 DMG 仍是永久免费、功能完整的独立分发链；App Store 版采用整款应用一次性付费下载，不使用 StoreKit 内购或渠道功能锁。
 
 ## 部署要点
 
@@ -85,6 +92,8 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 | `KEYCHAIN_PASSWORD` | CI 临时 keychain 密码 |
 | `APPLE_DISTRIBUTION_CERTIFICATE` | Apple Distribution `.p12` 的 base64 内容，用于 App Store 归档 |
 | `APPLE_DISTRIBUTION_CERTIFICATE_PASSWORD` | Apple Distribution `.p12` 的导出密码 |
+| `MAC_INSTALLER_DISTRIBUTION_CERTIFICATE` | Mac Installer Distribution `.p12` 的 base64 内容，用于 Mac Catalyst App Store 安装包签名 |
+| `MAC_INSTALLER_DISTRIBUTION_CERTIFICATE_PASSWORD` | Mac Installer Distribution `.p12` 的导出密码 |
 | `APP_STORE_CONNECT_API_KEY_ID` | App Store Connect API Key ID |
 | `APP_STORE_CONNECT_API_ISSUER_ID` | App Store Connect Issuer ID |
 | `APP_STORE_CONNECT_API_PRIVATE_KEY` | App Store Connect `.p8` 私钥全文 |

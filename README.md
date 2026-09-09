@@ -14,9 +14,9 @@
   <img src="docs/assets/showcase/mac-assets-cn.webp" alt="WA Chem 在 Mac 上管理分子资产" width="32%">
 </p>
 
-### Mac 与 iPad，统一原生体验
+### iPhone、iPad 与 Mac，统一原生体验
 
-WA Chem 在 Mac 与 iPad 上使用同一套原生 Apple 应用、共享同一套编辑器与资产管理逻辑；界面会针对键鼠、触控和 Apple Pencil 自然适配，不需要在两个产品之间切换。
+WA Chem 在 iPhone、iPad 与 Mac 上使用同一套原生 Apple 应用、共享同一套编辑器与资产管理逻辑；界面会针对键鼠、触控板、触控和 Apple Pencil 自然适配，不需要在两个产品之间切换。
 
 <p align="center">
   <img src="docs/assets/showcase/ipad-draw-cn.webp" alt="WA Chem 在 iPad 上使用触控与 Apple Pencil 绘制化学结构" width="520">
@@ -52,7 +52,7 @@ WA Chem 在 Mac 与 iPad 上使用同一套原生 Apple 应用、共享同一套
 
 ### Apple app
 
-Apple app 是同一个原生产品目标，面向 iPhone、iPad 与 Mac 一次上架。用户可以从 [WA Chem 公开下载页](https://wa-chem.fuluwa.top/#releases) 免费获取功能完整的 `wa-chem-apple_<version>_aarch64.dmg` 直装包，也可以在 App Store 一次性付费下载；两个渠道不使用内购或功能锁，App Store 渠道使用同一 bundle id `top.fuluwa.wa-chem`。本地资产与 WA-DD 连接信息走 Apple 账户文件夹与 iCloud 同步开关；WA-DD 凭据保存在系统钥匙串。
+Apple app 是同一个原生产品目标，面向 iPhone、iPad 与 Mac 一次上架。首个 App Store 版本（v0.1.60）已提交审核，通过后自动发布，采用整款应用一次性付费下载；发布到 GitHub / 下载页的 `wa-chem-apple_<version>_aarch64.dmg` 直装包永久免费且功能完整，两个渠道不使用内购或功能锁，共用同一 bundle id `top.fuluwa.wa-chem`。每次发版还会自动把 iPhone/iPad 与 Mac 构建上传 TestFlight，分发给内测与 Beta 测试组。本地资产与 WA-DD 连接信息走 Apple 账户文件夹与 iCloud 同步开关（设置中可关闭）；WA-DD 凭据保存在系统钥匙串。
 
 ### 服务器版（自托管）
 
@@ -73,10 +73,10 @@ Apple app 是同一个原生产品目标，面向 iPhone、iPad 与 Mac 一次�
 
 Apple app 与 Web 版是两条运行线，但用户可见的化学绘制、资产与 WA-DD 语义必须保持一致。
 
-### 为什么没有 Windows / iPhone 客户端
+### 为什么没有 Windows 客户端
 
 - **Windows**：短期内没有计划。原因很直接——预算有限，目前没有 Windows 电脑可用于开发验证；而 OCSR 推理和后续模型迭代依赖 CUDA 加速，Windows 版需要在真实的 Windows + NVIDIA 环境上开发与实测，等有条件再启动。
-- **iPhone**：交互上不划算。结构绘制和纠错需要精确点选单个原子、单根键并频繁微调，手机屏幕上误触率高、操作局促；尤其当识别结果出错时，在原图叠加下逐项修正结构，在手机上会非常难受。移动端的合理形态是 iPad + Apple Pencil。
+- **iPhone**：随统一原生 app 直接支持，与 iPad、Mac 是同一构建。但结构绘制和识别纠错需要精确点选单个原子、单根键并频繁微调，小屏上误触率高、操作局促，所以精细绘制的推荐形态仍是 iPad + Apple Pencil，iPhone 适合查看、轻量编辑与资产联动。
 
 ## 技术栈
 
@@ -91,6 +91,8 @@ Apple app 与 Web 版是两条运行线，但用户可见的化学绘制、资�
 - [开发指南](docs/DEVELOPMENT.md)：构建、测试、发版流程
 - [架构决策记录](docs/adr/0001-editor-core-contract.md)
 - [ChemDraw / InDraw 交互对标清单](docs/chemdraw-parity.md)
+- [资产、账户与 SDF 交互模型](docs/asset-account-model.md)
+- [OCSR 模型包合同](docs/ocsr-model-contract.md)
 
 ## 许可证
 

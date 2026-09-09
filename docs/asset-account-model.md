@@ -13,10 +13,10 @@
 
 ## Apple App Store 交付
 
-- Apple app 按同一个 App Store Connect 产品管理，App Store 版采用整款应用一次性付费下载，不使用内购或功能锁；用户购买后可在 Apple 设备上使用。
+- Apple app 按同一个 App Store Connect 产品管理，App Store 版采用整款应用一次性付费下载，不使用内购或功能锁；用户购买后可在 Apple 设备上使用。首个 App Store 版本 v0.1.60 已提交审核，通过后由发布流程自动上架。
 - Apple app 必须使用同一个 `top.fuluwa.wa-chem` Bundle ID 命名空间；版本号必须由 `update_version.sh` 同步，不允许手工维护两个不一致的版本。
 - GitHub 发布的本地直装/公证包永久免费且功能完整；它和 App Store 包可以使用不同签名与分发流程，但不得按渠道限制 iCloud、SDF 导出或其他产品功能，文档格式、资产语义、WA-DD 连接语义和 About 版本显示必须一致。
-- App Store 版必须启用 `iCloud.top.fuluwa.wa-chem` iCloud Documents entitlement，并保留未登录 iCloud 或未开启 iCloud Drive 时的本机 fallback。
+- App Store 版必须启用 `iCloud.top.fuluwa.wa-chem` iCloud Documents entitlement，并保留未登录 iCloud 或未开启 iCloud Drive 时的本机 fallback。Mac Catalyst App Store 包启用 App Sandbox，只保留用户已选文件读写、网络客户端、Keychain 与 iCloud entitlement。
 
 ## 资产层级
 
