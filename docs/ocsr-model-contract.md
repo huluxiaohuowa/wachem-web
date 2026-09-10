@@ -56,6 +56,15 @@ WA Chem 可以构建一个对标 `MolParser-7M` 的 OCSR 数据集，并独立�
 ms://huluxiaohuowa/wa-chem-ocsr-molparser-compatible-7m
 ```
 
+Apple OCSR 移动端模型仓库：
+
+```text
+ms://huluxiaohuowa/WA-Chem-OCSR-Mobile
+https://modelscope.cn/models/huluxiaohuowa/WA-Chem-OCSR-Mobile
+```
+
+该模型仓库只存放当前已验证、可复现、可干净替换的最佳 Apple OCSR 权重包。每次更新权重时，先完成固定评估与 Apple 包格式检查，再以最新最佳权重替换仓库中的 current 包；不得把中间 checkpoint、失败实验、脏导出目录或未验证样本混入 current。
+
 数据集样本必须围绕同一替换接口组织：
 
 - 每条样本包含原始或渲染图片、E-SMILES/SMILES 标签、可选 molblock、图片尺寸、来源类型、渲染参数、清洗状态和许可证来源；
