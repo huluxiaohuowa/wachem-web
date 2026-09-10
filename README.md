@@ -36,9 +36,8 @@ WA Chem 在 iPhone、iPad 与 Mac 上使用同一套原生 Apple 应用、共享
 ### 结构识别（OCSR）
 
 - Web 服务器版支持上传图片、粘贴截图和框选裁剪区域，调用本地 OCSR worker 后把 `molblock` 或 canonical SMILES 导入为新画布中的一个可编辑分子；
-- Apple app 使用同一识别结果协议，首版把同版本 Core ML 模型产物作为 app resource 打包，本机完成 detector、decoder，并把图片或 Apple Pencil 草图识别结果导入为新画布中的一个可编辑分子；
-- 两端都会显示模型就绪状态；模型缺失或校验未完成时，识别入口保持禁用并说明原因；
-- 识别结果携带模型版本、运行时、整体置信度和多分子明细；低置信度叠加纠错界面按后续冻结集评测结果继续完善。
+- Apple app 可将图片或 Apple Pencil 草图在设备本地识别为可编辑结构；
+- Apple 端采用 WA Chem 自训练模型，目前权重仍在持续训练与更新中；Web 端继续使用现有识别模型。
 
 ### 数据与联动
 
@@ -75,7 +74,7 @@ Apple app 与 Web 版是两条运行线，但用户可见的化学绘制、资�
 
 ### 为什么没有 Windows 客户端
 
-- **Windows**：短期内没有计划。原因很直接——预算有限，目前没有 Windows 电脑可用于开发验证；而 OCSR 推理和后续模型迭代依赖 CUDA 加速，Windows 版需要在真实的 Windows + NVIDIA 环境上开发与实测，等有条件再启动。
+- **Windows**：短期内没有计划。原因很直接——预算有限，目前没有 Windows 电脑可用于开发验证；Windows 版需要在真实的 Windows + NVIDIA 环境上开发与实测，等有条件再启动。
 - **iPhone**：随统一原生 app 直接支持，与 iPad、Mac 是同一构建。但结构绘制和识别纠错需要精确点选单个原子、单根键并频繁微调，小屏上误触率高、操作局促，所以精细绘制的推荐形态仍是 iPad + Apple Pencil，iPhone 适合查看、轻量编辑与资产联动。
 
 ## 技术栈
@@ -83,7 +82,7 @@ Apple app 与 Web 版是两条运行线，但用户可见的化学绘制、资�
 - **Apple app（`apps/apple` + `WAChemAppleCanvas`）**：Swift 6 纯原生 Universal Apple app（iPadOS 16+，Mac Catalyst / macOS 13+），不内嵌任何 JS/WebView。编辑器状态、化学规则、格式解析、资产、WA-DD、iCloud、Keychain 与交互语义全部封装在跨平台共享库 `WAChemAppleCanvas` 中；平台代码只做触控、指针、键盘、文件面板、菜单与窗口能力适配。SwiftUI 负责界面，Metal 负责交互画布（MSAA 4x、场景图元 CPU 细分 + 顶点着色器相机变换、文字纹理图集），CoreGraphics 负责 PNG/SVG 等导出，以及 Metal 不可用或测试快照场景下基于同一场景图的后备绘制。本地文档与分子库以 JSON 清单持久化。零第三方依赖。
 - **Web 应用**（`apps/web`）：React 19 + TypeScript + Vite，SVG 渲染画布；TypeScript 编辑器核心与原生核心行为对齐。当前 Molfile V2000、SDF、SMILES（常用子集）、CDXML/CDX（子集）、RXN V2000 导出、SVG 解析与导出以自研实现为主；服务器版允许按需要引入 RDKit、Open Babel 等后端化学信息学能力，只要用户可见的化学语义与 Apple app 保持一致。自研 `EditorCore` 外部 store 经 `useSyncExternalStore` 接入 React，草稿用 IndexedDB 本地持久化；Vitest 测试。
 - **服务器端**（`services/api`）：Python 3.11+ / FastAPI + Uvicorn + Pydantic，SQLite（WAL）存储用户与文档，PBKDF2 口令散列、Fernet 加密 WA-DD 令牌；Docker Compose 一体部署，nginx 托管 Web 静态文件并反代 `/api`。
-- **OCSR 识别**：采用 MolParser-Mobile（服务器 PyTorch、Apple app Core ML 双产物）。服务器版通过独立 `wa-chem-ocsr` worker 读取 `MODEL_HUB_SHARED_MODELS_PATH` 下的 ModelScope 模型；也可在构建 worker 镜像时设置 `WA_CHEM_OCSR_BUNDLE_MODEL=true` 下载并校验模型，不把权重打进普通 API 镜像。worker 镜像按硬件提供 `amd` / `arm` / `l4t` / `thor` 等 profile，各分 CPU 与 CUDA 变体；Apple 端 Core ML 产物经 `scripts/sync_apple_ocsr_model.sh` 校验同步为 app 资源。默认 PyTorch 模型包由内置 MolParser-Mobile runner 执行，其他模型包可通过 [OCSR 模型包合同](docs/ocsr-model-contract.md) 声明 runner；API 和 Web 只代理统一识别协议。VOS/Web 的模型下载与同步复用通用 Model Hub 管理方式；Apple app 使用同版本 Core ML 产物作为 app 资源打包，并保留 manifest/version 校验。
+- **OCSR 识别**：Apple 端采用 WA Chem 自训练模型，目前权重仍在持续训练与更新中；仓库中的现有 Core ML 产物暂时保留，待新模型准备完成后替换。Web 端继续使用现有识别模型。
 
 ## 文档
 
@@ -96,4 +95,4 @@ Apple app 与 Web 版是两条运行线，但用户可见的化学绘制、资�
 
 ## 许可证
 
-尚未确定。第三方代码、模型权重和训练数据在引入前分别完成许可证与再分发条件审查。
+尚未确定。第三方代码与训练数据在引入前分别完成许可证与使用条件审查。
