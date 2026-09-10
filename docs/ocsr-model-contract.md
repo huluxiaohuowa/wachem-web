@@ -34,6 +34,38 @@ PYTHON=/Users/hulu/dev/envs/conda/bin/python scripts/sync_apple_ocsr_model.sh
 
 Apple app 是一套 App Store 产品体验，不拆 macOS/iPadOS 两套识别逻辑。图片选择、剪贴板、Pencil 草图、裁剪和开始识别只是系统输入适配；模型包校验、detector、decoder、结果协议和回填都在 shared Apple core/App shell 的同一条链路上完成。
 
+## 替换模型兼容性
+
+新训练或微调的 OCSR 模型可以替换 `MolParser-Mobile` 的权重，但不得替换调用方看到的输入输出边界。训练、导出和发布时必须保持以下兼容性：
+
+- recognition encoder 输入名、shape 和预处理与 `MolParser-Mobile` 相同：`pixel_values`，224×224，INTER_LINEAR 缩放，/255，ImageNet mean/std；
+- decoder step 输入输出与 `MolParser-Mobile` 相同：`input_ids`、`pos_id`、`attention_mask`、`enc_hidden`、每层 KV cache 输入和 `_new` 输出，`decoder_start_token_id=0`、`eos=2`、`max_length=256`；
+- tokenizer 使用同一套 E-SMILES 词表和特殊 token 约定，新增 token 只能通过显式版本化兼容评估进入，不能让旧 Apple/Core ML runtime 或服务器 runner 静默解码错误；
+- detector 输出保持 `[1,5,N] = cx, cy, w, h, score`，NMS 和无检出时整图回退仍由宿主侧完成；
+- runner 的 WA Chem JSON 输出保持本文档的请求/输出协议，至少返回可回填的 `molblock` 或 `canonical_smiles`，并保留 `model_id`、`model_version`、`runtime`、`confidence` 和 `molecules` 语义。
+
+因此，模型迭代的目标是“同接口更好权重”，不是新增一套 WA Chem 客户端协议。若候选架构无法导出为上述 PyTorch/ONNX/Core ML 边界，必须先写薄适配层证明 Web、API、Apple shared core 均无需业务改造，才能进入替换评测。
+
+## 训练数据集路线
+
+WA Chem 可以构建一个对标 `MolParser-7M` 的 OCSR 数据集，并独立发布到 ModelScope，作为后续 `MolParser-Mobile` 兼容模型的训练来源。数据集不是运行时模型包，必须与模型产物分开命名、分开版本、分开许可证记录。
+
+建议数据集 ID：
+
+```text
+ms://huluxiaohuowa/wa-chem-ocsr-molparser-compatible-7m
+```
+
+数据集样本必须围绕同一替换接口组织：
+
+- 每条样本包含原始或渲染图片、E-SMILES/SMILES 标签、可选 molblock、图片尺寸、来源类型、渲染参数、清洗状态和许可证来源；
+- 数据划分至少包含 synthetic、patent/literature crop、web screenshot、mobile photo、hand-drawn/sketch 五类，并固定 train/validation/test split；
+- synthetic 样本用于规模，真实论文/专利/网页/手机照片样本用于域适配和主动学习闭环；
+- 手绘/Pencil 草图样本必须单独标注来源，不得混入印刷图指标冒充提升；
+- 发布 manifest 记录数据生成脚本版本、源数据白名单、去重策略、拆分哈希、标签格式版本和下游兼容的 `MolParser-Mobile` I/O 版本。
+
+验收时不以“数据集已上传”为完成标准。必须能从该 ModelScope 数据集复现实验划分，训练出保持 `MolParser-Mobile` I/O 兼容的候选权重，并用冻结集证明至少不回退当前模型在印刷图、截图、照片和手绘四类样本上的可回填率。
+
 ## manifest.json
 
 模型包根目录必须包含 `manifest.json`。下载脚本会校验 `files` 中列出的文件和 sha256；worker 优先读取 `runner` 字段决定如何调用模型。当前默认模型包使用 `"runtime": "pytorch"`，worker 会自动使用内置 MolParser-Mobile runner。
