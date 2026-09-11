@@ -56,6 +56,15 @@ WA Chem 可以构建一个对标 `MolParser-7M` 的 OCSR 数据集，并独立�
 ms://huluxiaohuowa/wa-chem-ocsr-molparser-compatible-7m
 ```
 
+首个 Apple OCSR mobile 训练数据快照已经独立存放在：
+
+```text
+ms://huluxiaohuowa/WA-Chem-OCSR-Mobile-Dataset/v0.1.0
+https://modelscope.cn/datasets/huluxiaohuowa/WA-Chem-OCSR-Mobile-Dataset
+```
+
+`v0.1.0` 包含本次 first-candidate PubChem/RDKit 渲染数据归档、从本机下载后同步到 server6 的 DECIMER hand-drawn Zenodo 7617107 原始缓存归档、`dataset-snapshot.json` 和 `SHA256SUMS.txt`。该仓库是数据资产，不是运行时模型包。
+
 Apple OCSR 移动端模型仓库：
 
 ```text
