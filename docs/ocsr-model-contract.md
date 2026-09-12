@@ -41,6 +41,7 @@ Apple app 是一套 App Store 产品体验，不拆 macOS/iPadOS 两套识别逻
 - recognition encoder 输入名、shape 和预处理与 `MolParser-Mobile` 相同：`pixel_values`，224×224，INTER_LINEAR 缩放，/255，ImageNet mean/std；
 - decoder step 输入输出与 `MolParser-Mobile` 相同：`input_ids`、`pos_id`、`attention_mask`、`enc_hidden`、每层 KV cache 输入和 `_new` 输出，`decoder_start_token_id=0`、`eos=2`、`max_length=256`；
 - tokenizer 使用同一套 E-SMILES 词表和特殊 token 约定，新增 token 只能通过显式版本化兼容评估进入，不能让旧 Apple/Core ML runtime 或服务器 runner 静默解码错误；
+- 训练脚本必须用官方 MolParser-Mobile processor/tokenizer 做边界校验；E-SMILES/Markush 扩展样本只能在该 tokenizer 可无损 round-trip 时进入兼容训练集，否则必须进入单独的实验/下一版兼容变更队列；
 - detector 输出保持 `[1,5,N] = cx, cy, w, h, score`，NMS 和无检出时整图回退仍由宿主侧完成；
 - runner 的 WA Chem JSON 输出保持本文档的请求/输出协议，至少返回可回填的 `molblock` 或 `canonical_smiles`，并保留 `model_id`、`model_version`、`runtime`、`confidence` 和 `molecules` 语义。
 
@@ -59,11 +60,11 @@ ms://huluxiaohuowa/wa-chem-ocsr-molparser-compatible-7m
 首个 Apple OCSR mobile 训练数据快照已经独立存放在：
 
 ```text
-ms://huluxiaohuowa/WA-Chem-OCSR-Mobile-Dataset/v0.1.0
+ms://huluxiaohuowa/WA-Chem-OCSR-Mobile-Dataset
 https://modelscope.cn/datasets/huluxiaohuowa/WA-Chem-OCSR-Mobile-Dataset
 ```
 
-`v0.1.0` 包含本次 first-candidate PubChem/RDKit 渲染数据归档、从本机下载后同步到 server6 的 DECIMER hand-drawn Zenodo 7617107 原始缓存归档、`dataset-snapshot.json` 和 `SHA256SUMS.txt`。该仓库是数据资产，不是运行时模型包。
+该数据仓库按数据类型在根目录分门别类放置，不使用 `v0.1.0/` 这类让使用者猜测当前入口的版本目录。ModelScope 仓库主体必须是平台可识别的展开式 split 表和图片文件，不得把 tar 压缩包当作训练数据主体上传；tar 在 ModelScope 上只是不可展开的普通/LFS 文件，不能证明数据集可被平台识别或复现实验划分。当前根目录分类应包括 `synthetic/pubchem-rdkit/`（PubChem/RDKit 渲染图片与标签 split）和 `handdrawn/decimer/`（DECIMER hand-drawn Zenodo 7617107 图片与标签 split）。后续扩充按 `synthetic/chembl/`、`synthetic/bms/`、`synthetic/markush-esmiles/`、`renders/indigo/`、`captures/screenshot/`、`captures/mobile-photo/`、`eval/frozen/` 等分类追加。该仓库是数据资产，不是运行时模型包。
 
 Apple OCSR 移动端模型仓库：
 
@@ -73,6 +74,13 @@ https://modelscope.cn/models/huluxiaohuowa/WA-Chem-OCSR-Mobile
 ```
 
 该模型仓库只存放当前已验证、可复现、可干净替换的最佳 Apple OCSR 权重包。每次更新权重时，先完成固定评估与 Apple 包格式检查，再以最新最佳权重替换仓库中的 current 包；不得把中间 checkpoint、失败实验、脏导出目录或未验证样本混入 current。
+
+模型仓库即使尚未发布 `current/` 权重，也必须保留完整说明和平台元数据，不能只上传权重文件或只上传一句内部说明：
+
+- `README.md` 顶部使用 ModelScope 可解析的 YAML 元数据，至少声明 `license`、`task`、`task_categories`、`tags`；
+- `README.md` 正文必须包含用途、适用范围、包结构、运行接口、许可/来源、评估状态和替换门禁；
+- 根目录保留 `configuration.json`、`manifest.json`、`MODEL_STATUS.md` 与 `SHA256SUMS.txt`；
+- 正式发布候选权重时，`current/` 必须同时包含 `manifest.json`、`tokenizer/vocab.txt`、`tokenizer/tokenizer_config.json`、`rec/MolParserMobileEncoder.mlpackage/`、`rec/MolParserMobileDecoderStep.mlpackage/`、`eval-report.json` 和 `SHA256SUMS.txt`。
 
 数据集样本必须围绕同一替换接口组织：
 
