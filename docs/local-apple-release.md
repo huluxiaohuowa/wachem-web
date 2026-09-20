@@ -1,12 +1,13 @@
 # Local Apple release configuration
 
-WA Chem reads Apple release credentials from the `wa-chem` object in
-`~/.apple.json`. The file must be mode `0600` and must never be committed.
-Each future app can add a sibling top-level object without changing WA Chem.
+WA Chem merges the team-wide `common` object with the app-specific `wa-chem`
+object in `~/.apple.json`. The file must be mode `0600` and must never be
+committed. New apps reuse `common` and add only their own provisioning profiles
+under a sibling top-level object.
 
 ```json
 {
-  "wa-chem": {
+  "common": {
     "teamId": "...",
     "temporaryKeychainPassword": "a local throwaway keychain password",
     "appStoreConnect": {
@@ -28,7 +29,9 @@ Each future app can add a sibling top-level object without changing WA Chem.
         "password": "...",
         "identity": "Developer ID Application: ..."
       }
-    },
+    }
+  },
+  "wa-chem": {
     "provisioningProfiles": {
       "iosBase64": "...",
       "macCatalystBase64": "..."
