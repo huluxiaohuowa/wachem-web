@@ -23,11 +23,6 @@ under a sibling top-level object.
       "macInstallerDistribution": {
         "p12Base64": "...",
         "password": "..."
-      },
-      "developerIdApplication": {
-        "p12Base64": "...",
-        "password": "...",
-        "identity": "Developer ID Application: ..."
       }
     }
   },
@@ -46,8 +41,8 @@ the corresponding path field: `privateKeyPath`, `p12Path`, `iosPath`, or
 
 `./update_version.sh` validates this object and the local iOS SDK before it
 changes any version file. It then builds and uploads both Apple platforms
-locally, pushes the release tag, waits for the Linux Web/VOS workflow, and
-adds the signed/notarized Mac DMG to the same GitHub Release.
+locally, pushes the release tag, and waits for the Linux Web/VOS workflow.
+Mac distribution is App Store-only; GitHub Releases contain no DMG.
 
 For a signing-only App Store archive check that does not upload a build, first
 materialize the config and then run `upload_apple_testflight.sh` with the third

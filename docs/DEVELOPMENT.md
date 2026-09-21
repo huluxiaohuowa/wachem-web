@@ -66,7 +66,7 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 - `wa-chem_deploy_<version>.tar.gz`：独立部署包；
 - `SHA256SUMS`：产物校验和。
 
-推送 `vX.Y.Z` tag 触发 Release workflow 自动构建并发布 Web/VOS 产物，同时将同一 Apple target 的 iPhone/iPad 与 Mac Catalyst 构建上传到 App Store Connect/TestFlight。`./update_version.sh patch --submit-app-store` 会继续将 iOS 和 macOS 版本提交正式审核；不带该选项时只上传、不提审。Mac 版仅通过 App Store 发布，不再生成或上传 DMG。
+推送 `vX.Y.Z` tag 触发 Release workflow 自动构建并发布 Web/VOS 产物，同时将同一 Apple target 的 iPhone/iPad 与 Mac Catalyst 构建上传到 App Store Connect/TestFlight：构建会分发到 internal（`WA Chem Internal`）与 external（`WA Chem Beta Testers`）测试组并写入本地化 What's New；外部组构建按 App Store Connect 配置进入 Beta App Review；单个平台上传失败可在 workflow 中单独重试。`./update_version.sh patch --submit-app-store` 会在 tag 消息中写入 `App-Store-Submit: true` 标记，上传成功后继续将 iOS 和 macOS 版本提交正式审核，并在审核通过后自动发布；提审的 What's New 由 `scripts/prepare_apple_release_notes.py` 从上一个成功提审版本以来的全部提交自动生成；不带该选项时只上传、不提审。Mac 版仅通过 App Store 发布，不再生成或上传 DMG。
 
 ## 部署要点
 
@@ -78,12 +78,10 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 
 ## Apple App Store 签名与上传
 
-本地 Apple 发布使用 `~/.apple.json` 中的 App Store Connect、Apple Distribution 与 provisioning profile 凭据。
+本地 Apple 发布使用 `~/.apple.json` 中的以下凭据：
 
 | Secret | 用途 |
 | --- | --- |
-| `APPLE_ID` | Apple Developer 账号邮箱 |
-| `APPLE_PASSWORD` | Apple ID 的 app-specific password |
 | `APPLE_TEAM_ID` | Apple Developer Team ID |
 | `KEYCHAIN_PASSWORD` | CI 临时 keychain 密码 |
 | `APPLE_DISTRIBUTION_CERTIFICATE` | Apple Distribution `.p12` 的 base64 内容，用于 App Store 归档 |
@@ -96,4 +94,4 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 | `IOS_APP_STORE_PROVISIONING_PROFILE` | `WA Chem App Store iOS` profile 的 base64 内容 |
 | `MAC_CATALYST_APP_STORE_PROVISIONING_PROFILE` | `WA Chem App Store Mac Catalyst` profile 的 base64 内容 |
 
-App Store 上传凭据是 Apple 发布流程的必需项；在使用 `--submit-app-store` 前，还需在 App Store Connect 填完当前版本的必填内容。
+App Store 上传凭据是 Apple 发布流程的必需项；在使用 `--submit-app-store` 前，还需在 App Store Connect 填完当前版本的应用隐私、年龄分级、一次性下载价格/可用范围、审核联系信息、描述与截图等必填内容。不要为 App Store 版创建内购商品。
