@@ -53,9 +53,9 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 
 - 已完成：共享无头核心（schema v2）、Apple app 原生画布（Metal，CoreGraphics 后备绘制/导出）、完整导入导出（Mol/SDF/SMILES/CDXML/CDX 导入、RXN 导出、SVG/PNG/wachem）、ChemDraw 交互子集与绘图进阶项（原子标签就地编辑、价态校验/自由基、反应箭头/轨道/整理反应式、内置模板库、套索/旋转/缩放、SMILES 方向键与 E-Z 几何推导）、中英双语界面（Web 顶栏切换、Apple 跟随系统 per-app 语言）、图片识别统一入口与 Apple Pencil 草图识别、画布自适应缩放、iPad 双指导航手势优先仲裁、原生原子/键手势与 Web 语义对齐；
 - 资产与联动：本地 SDF 分子库多资产管理、WA-DD 项目浏览/载入与新建/追加/替换写入、iCloud 与 Keychain 策略（设置中可开关 iCloud 存储）、Mac Catalyst App Sandbox、VOS 应用包发布；
-- App Store 交付：统一交付链已跑通——发版 tag 自动归档上传 iPhone/iPad 与 Mac 构建到 TestFlight（分发 internal / external 测试组并写入 What's New，外部组按需 Beta App Review），`--submit-app-store` 继续提交正式审核，审核通过后自动发布；首个 App Store 版本 v0.1.60 已于 2026-09-09 提交审核；
+- App Store 交付：统一交付链已跑通——发版 tag 自动归档上传 iPhone/iPad 与 Mac 构建到 TestFlight（分发 internal / external 测试组并写入 What's New，外部组按需 Beta App Review），`--submit-app-store` 继续提交正式审核，审核通过后自动发布；Mac 版已上架，iPhone/iPad 版等待审核；
 - 测试基线：Web 183 个（vitest，2026-09-09 实测全过）、Apple shared core 162 个 XCTest + 19 个 Swift Testing（同日全过），并用 `scripts/check_runtime_lines.py` 阻止旧桌面壳、旧网页桥、旧脚本桥和分裂 Apple 产品壳回流；
-- 已发布：v0.1.60（GitHub Release，含签名公证 DMG、独立部署包与 VOS 应用包）；
+- 已发布：GitHub Releases 提供独立部署包与 VOS 应用包；Mac 版仅通过 App Store 发布；
 - 进行中：App Store 首版审核跟进、低置信度识别纠错叠加界面（按冻结集评测结果完善）。
 
 ## 版本与发版
@@ -64,10 +64,9 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 
 - `wa-chem_<version>_pull.tar`：VOS app 包；
 - `wa-chem_deploy_<version>.tar.gz`：独立部署包；
-- `wa-chem-apple_<version>_aarch64.dmg`：Apple app 开发直装/公证包；App Store 渠道使用 `apps/apple` 的 Universal Apple app target；
 - `SHA256SUMS`：产物校验和。
 
-推送 `vX.Y.Z` tag 触发 Release workflow 自动构建并发布产物，同时将同一 Apple target 的 iPhone/iPad 与 Mac Catalyst 构建上传到 App Store Connect/TestFlight：构建会分发到 internal（`WA Chem Internal`）与 external（`WA Chem Beta Testers`）测试组并写入本地化 What's New；外部组构建按 App Store Connect 配置进入 Beta App Review；单个平台上传失败可在 workflow 中单独重试。`./update_version.sh patch --submit-app-store` 会在 tag 消息中写入 `App-Store-Submit: true` 标记，Release workflow 据此在上传成功后继续将 iOS 和 macOS 版本提交正式审核，并在审核通过后自动发布；提审的 What's New 由 `scripts/prepare_apple_release_notes.py` 从上一个成功提审版本以来的全部提交自动生成；不带该选项时只上传、不提审。Developer ID 签名与公证的 DMG 仍是永久免费、功能完整的独立分发链；App Store 版采用整款应用一次性付费下载，不使用 StoreKit 内购或渠道功能锁。
+推送 `vX.Y.Z` tag 触发 Release workflow 自动构建并发布 Web/VOS 产物，同时将同一 Apple target 的 iPhone/iPad 与 Mac Catalyst 构建上传到 App Store Connect/TestFlight。`./update_version.sh patch --submit-app-store` 会继续将 iOS 和 macOS 版本提交正式审核；不带该选项时只上传、不提审。Mac 版仅通过 App Store 发布，不再生成或上传 DMG。
 
 ## 部署要点
 
@@ -77,15 +76,12 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 - `ictrek.app/` VOS 部署只接入 `vos_default`，WA-DD 的 VOS Web 服务同样通过 `wa-dd-web:8800` 这个 Docker DNS 名称访问；
 - VAI / VOS 适配（`ictrek.app`）在独立部署验收后启用，必须显式开启，不影响独立部署的登录/注册/管理员流程。
 
-## Apple app 签名与公证（CI）
+## Apple App Store 签名与上传
 
-在 GitHub `Settings` → `Secrets and variables` → `Actions` → `Repository secrets` 配置后，Release workflow 构建 DMG 时自动签名和公证：
+本地 Apple 发布使用 `~/.apple.json` 中的 App Store Connect、Apple Distribution 与 provisioning profile 凭据。
 
 | Secret | 用途 |
 | --- | --- |
-| `APPLE_CERTIFICATE` | Developer ID Application `.p12` 的 base64 内容 |
-| `APPLE_CERTIFICATE_PASSWORD` | 导出 `.p12` 时设置的密码 |
-| `APPLE_SIGNING_IDENTITY` | `Developer ID Application: ... (TEAMID)` |
 | `APPLE_ID` | Apple Developer 账号邮箱 |
 | `APPLE_PASSWORD` | Apple ID 的 app-specific password |
 | `APPLE_TEAM_ID` | Apple Developer Team ID |
@@ -100,4 +96,4 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 | `IOS_APP_STORE_PROVISIONING_PROFILE` | `WA Chem App Store iOS` profile 的 base64 内容 |
 | `MAC_CATALYST_APP_STORE_PROVISIONING_PROFILE` | `WA Chem App Store Mac Catalyst` profile 的 base64 内容 |
 
-未配置 Developer ID 凭据时仍会生成 DMG，但下载后可能被 Gatekeeper 拦截。App Store 上传凭据是 Release workflow 的必需项；在使用 `--submit-app-store` 前，还需在 App Store Connect 填完当前版本的应用隐私、年龄分级、一次性下载价格/可用范围、审核联系信息、描述与截图等必填内容。不要为 App Store 版创建内购商品。
+App Store 上传凭据是 Apple 发布流程的必需项；在使用 `--submit-app-store` 前，还需在 App Store Connect 填完当前版本的必填内容。

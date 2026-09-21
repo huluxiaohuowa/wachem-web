@@ -29,3 +29,12 @@ test("model copy distinguishes Apple and Web recognition models", () => {
   assert.match(script, /Web 端继续使用现有识别模型/);
   assert.doesNotMatch(script, /Model compute paths by product/);
 });
+
+test("Mac uses the App Store while iPhone and iPad remain coming soon", () => {
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  const script = readFileSync(new URL("../script.js", import.meta.url), "utf8");
+
+  assert.match(html, /href="https:\/\/apps\.apple\.com\/app\/wa-chem\/id6809643025"/);
+  assert.match(html, /iOS 与 iPadOS · 即将上架/);
+  assert.doesNotMatch(script, /wa-chem-mac_\[\^\/\]\+_aarch64\\\.dmg/);
+});

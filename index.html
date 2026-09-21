@@ -259,7 +259,7 @@
       <section class="release-section" id="releases" aria-labelledby="releases-title">
         <div class="release-copy">
           <h2 id="releases-title" data-i18n="getWaChem">获取 WA Chem</h2>
-          <p data-i18n="releaseBody">发布包将通过 GitHub Releases 提供。每个版本都包含变更说明、校验信息和对应平台的下载文件。</p>
+          <p data-i18n="releaseBody">Web 与 VOS 发布包通过 GitHub Releases 提供；Mac 版请从 App Store 下载。</p>
           <div class="release-actions">
             <a class="button button-primary" href="https://github.com/huluxiaohuowa/wachem-web/releases">
               <span data-i18n="goToReleases">前往 Releases</span>
@@ -314,28 +314,29 @@
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M5 19h14" /></svg>
             </a>
             <a
-              class="download-item is-pending"
-              data-download-key="mac"
-              href="https://github.com/huluxiaohuowa/wachem-web/releases"
+              class="download-item"
+              href="https://apps.apple.com/app/wa-chem/id6809643025"
+              aria-label="前往 App Store"
+              data-i18n-aria="openMacAppStore"
             >
               <span class="download-index">03</span>
               <span class="download-copy">
                 <strong>Mac App</strong>
-                <small data-i18n="macPackageMeta">Apple Silicon · dmg</small>
+                <small data-i18n="macStoreMeta">Mac App Store · 已上架</small>
               </span>
-              <span class="download-meta" data-download-meta data-i18n="waitingRelease">等待发布</span>
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M5 19h14" /></svg>
+              <span class="download-meta" data-i18n="openMacAppStore">前往 App Store</span>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 5h5v5m0-5-8 8M19 14v5H5V5h5" /></svg>
             </a>
             <div class="download-item is-pending store-item">
               <span class="download-index">04</span>
               <span class="download-copy">
-                <strong data-i18n="appStore">应用商店</strong>
-                <small data-i18n="appStoreMeta">macOS 与 iPadOS · 即将上架</small>
+                <strong>iPhone &amp; iPad</strong>
+                <small data-i18n="appStoreMeta">iOS 与 iPadOS · 即将上架</small>
               </span>
-              <span class="store-placeholders" aria-label="Mac App Store 与 iPad App Store 尚未上架" data-i18n-aria="appStoresPending">
+              <span class="store-placeholders" aria-label="iPhone 与 iPad 版即将上架" data-i18n-aria="appStoresPending">
                 <span class="store-placeholder">
-                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 17 4-10 4 10M9.5 14h5M6 17h2m8 0h2" /></svg>
-                  Mac
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2" /><path d="M10 18h4" /></svg>
+                  iPhone
                 </span>
                 <span class="store-placeholder">
                   <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2" /><path d="M10 17h4" /></svg>

@@ -51,7 +51,7 @@ WA Chem 在 iPhone、iPad 与 Mac 上使用同一套原生 Apple 应用、共享
 
 ### Apple app
 
-Apple app 是同一个原生产品目标，面向 iPhone、iPad 与 Mac 一次上架。首个 App Store 版本（v0.1.60）已提交审核，通过后自动发布，采用整款应用一次性付费下载；发布到 GitHub / 下载页的 `wa-chem-apple_<version>_aarch64.dmg` 直装包永久免费且功能完整，两个渠道不使用内购或功能锁，共用同一 bundle id `top.fuluwa.wa-chem`。每次发版还会自动把 iPhone/iPad 与 Mac 构建上传 TestFlight，分发给内测与 Beta 测试组。本地资产与 WA-DD 连接信息走 Apple 账户文件夹与 iCloud 同步开关（设置中可关闭）；WA-DD 凭据保存在系统钥匙串。
+Apple app 是同一个原生产品目标，面向 iPhone、iPad 与 Mac 一次上架。Mac 版已在 [App Store](https://apps.apple.com/app/wa-chem/id6809643025) 上架，iPhone 与 iPad 版即将上架；Apple 平台不再通过 GitHub Releases 发布 DMG。每次发版会把 iPhone/iPad 与 Mac 构建上传 TestFlight，分发给内测与 Beta 测试组。本地资产与 WA-DD 连接信息走 Apple 账户文件夹与 iCloud 同步开关（设置中可关闭）；WA-DD 凭据保存在系统钥匙串。
 
 ### 服务器版（自托管）
 
