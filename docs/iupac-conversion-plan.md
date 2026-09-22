@@ -67,10 +67,10 @@ structureToName(structure, options) -> StructureToNameResult
 
 当前进度（2026-09-22）：
 
-- Step 0 进行中：已锁定 NISPO 0.1.7、py2opsin 1.2.0/OPSIN 2.9.0、许可证边界和首版共享冻结语料；复杂官能团、环系和立体化学语料仍待扩充；
+- Step 0 进行中：已锁定 NISPO `0.1.7@929febd093f4c5069d4004d91d785948514aea15`、py2opsin 1.2.0/OPSIN 2.9.0 和许可证边界；除 93 条快速分层语料外，已从官方测试源码可复现地冻结 1,296 个唯一规范结构，后续覆盖率以该官方语料为最低基线；
 - Step 1 进行中：共享状态/候选/结构版本/回译合同已进入 API 与 Swift Core；完整规范化校验和及 InChI 基线尚未实现；
 - Step 2 进行中：API 已实现本地 NISPO→OPSIN 回译和 OPSIN→结构端点，x86_64 目标镜像已验证，完整冻结集仍待扩充；
-- Step 3 优先扩展：Apple 纯 Swift `structure-v4` 保留 `organic-v3` 可逆子集，并先扩展结构→名称；当前新增支链烷烃，以及苯基取代的 N-羟基烯胺骨架；
+- Step 3 未完成：Apple 纯 Swift 已接入与官方同名的 `MoleculeFacts → RoutePlan → RuleSpec → Candidate` 通用执行骨架，并为每个结果记录实际规则族。第一次诚实审计发现原实现 98 个“成功”中仅 62 个 OPSIN 回译等价，随后已禁止旧精确图查表和未经支持的电荷、自由基、异常氢价、互变异构/指示氢状态冒充成功。官方 1,296 条基线当前 1,296 条均可导入、24 条返回名称，24/24 OPSIN 回译结构等价、16 条名称与 NISPO 完全一致、`legacy-exact-graph-fallback` 命中为 0；这代表成功精确率门槛恢复，但覆盖率仅 1.85%。母体候选排序、递归取代基、完整后缀、部分氢化环、互变异构/指示氢以及复杂电荷/硫磷硼规则尚未等价移植，因此本步骤距离退出条件仍很远；
 - Step 4 暂缓扩面：名称→结构维持 `organic-v3`，不再阻塞 Step 3 的结构命名覆盖，但不得据此宣称双向完成；
 - Step 5/6 进行中：27 条共享冻结向量中的 Apple 支持项全部双向往返通过；Web 和 Apple 已接产品入口，结构→名称只接受一个完整分子选区；右键/触摸长按后直接生成，不再弹出转换窗口；
 - 当前尚未发版。必须完成全量回归、新鲜 Apple 产物验证、目标镜像重建和发布验收后才能进入统一发版。
@@ -120,6 +120,16 @@ structureToName(structure, options) -> StructureToNameResult
 4. 用 `ChemDocument` 的稳定原子 ID 保留名称片段与来源原子的映射，便于错误定位；
 5. 每个生成名称都送入开发期参考 OPSIN 做差分回译；产品运行时不依赖网络或外部运行时；
 6. 不支持结构返回具体失败阶段，不退化为分子式、SMILES 或数据库标题。
+
+固定验证命令与口径：
+
+- `scripts/generate_nispo_upstream_corpus.py <NISPO-0.1.7-checkout>` 只接受干净的官方 tag/commit，生成 `tests/fixtures/iupac/nispo-0.1.7-upstream.json`；
+- `scripts/generate_nispo_rule_manifest.py <NISPO-0.1.7-checkout>` 冻结官方注册的 123 个 `RuleSpec` 规则族、优先级、gate 和 producer；`tests/fixtures/iupac/nispo-0.1.7-rule-manifest.json` 中仍为 `missing` 的规则族表示尚未等价移植，不能用局部用例通过替代；
+- `scripts/verify_native_iupac_differential.py --fixture upstream` 对每个原生成功结果执行 OPSIN 回译和规范分子图比较，并分别报告导入、命名、规则族、旧精确图兜底和等价数量；
+- `scripts/generate_nispo_acyclic_hydrocarbon_corpus.py <NISPO-0.1.7-checkout>` 系统枚举最多 8 个碳的全部非同构碳树以及最多两个合法双/三键组合；`--fixture acyclic --require-full-coverage` 是 `acyclic-parent` 碳氢化合物子域的独立门禁，防止官方测试文字抽取遗漏基础结构空间；
+- `scripts/generate_nispo_acyclic_alcohol_corpus.py <NISPO-0.1.7-checkout>` 在最多 8 碳的非同构饱和碳树上系统枚举一至两个羟基位置；`--fixture alcohol --require-full-coverage` 独立验证主官能团母链选择、编号和支链组合；
+- `scripts/generate_nispo_acyclic_carbonyl_corpus.py`、`scripts/generate_nispo_acyclic_carboxylic_acid_corpus.py` 和 `scripts/generate_nispo_acyclic_primary_amine_corpus.py` 分别系统枚举单醛/单酮、单羧酸和一级胺；对应 `carbonyl`、`acid`、`amine` fixture 均纳入最终完成门禁；
+- 最终门禁使用 `--require-full-coverage`。未达到 1,296/1,296 可导入、命名且 OPSIN 等价，或仍命中 `legacy-exact-graph-fallback`，均不得把 Step 3 标记为完成。
 
 退出条件：Apple 分层冻结集中“返回成功”的结果 100% 回译为等价分子图；对共同有机基准报告相对固定 NISPO 的覆盖率，禁止通过大量拒绝伪造准确率。“全支持”不作为声明，因为 IUPAC 有机、无机、聚合物等分别属于不同规则体系。
 
@@ -212,6 +222,30 @@ structureToName(structure, options) -> StructureToNameResult
 - 触摸编辑不依赖 Tab：双击名称后可用软键盘编辑，点画布空白、点其他工具、失焦或点软键盘“完成”均提交，只有显式取消/Esc 回退；
 - 本地、OCR、文件导入和 WA-DD 载入的结构进入同一画布文档后，均使用相同的选中分子命名流程；
 - 已增加自由文本的新建、任意文字输入、选中、编辑、拖动、删除和“化学导出不变”回归测试；完整回归和新鲜安装包验证仍是发版前门禁。
+
+### 2026-09-22 Apple 原生 NISPO 规则管线扩展
+
+- Apple Core 已纳入 NISPO 0.1.7 的可分发规则资源、BSD-3-Clause 许可证、第三方通知和 SHA-256 来源记录；运行时仍为 Swift + Apple 系统库，不包含 Python、RDKit、JVM、WebView 或网络回退；
+- 新增纯 Swift 分子图层：稳定原子索引、元素/同位素/形式电荷、芳香性、Tarjan 桥边、环原子/环系、连通分量和简单路径；
+- 新增规则层：直链与支链烃、单一不饱和键、醇/多元醇、卤素/氨基/氧代/杂原子置换、腈、羧酸/羧酸根、季铵离子、保留苯系和取代苯、单环杂环、桥环和螺环；
+- 新增描述符层：同位素质量数、双键 E/Z 和四面体 R/S；绝对 R/S 写入共享 `ChemAtom.stereoDescriptor`，不依赖一次性的 SMILES 邻接顺序；
+- 134,367 条生成及保留环模板被编译为 684 个随机读取分桶，产物 `generated_fused_templates.wacidx` 为 696,022 bytes；运行时按原子数、环数和元素组成只解压候选桶；
+- 通用规则已继续覆盖线性烷基支链、多个双/三键、伯/仲/叔胺、多取代苯定位、环酮和环醇；打包规则库由最终原生模板层承接，不再出现“资源已打包但普通结构没有进入模板匹配”的断路；
+- 模板匹配增加迭代邻域指纹、最少候选优先回溯和状态上限；保留模板名若已隐含立体构型，不再被通用 E/Z 后处理重复修饰；
+- 分层冻结语料当前 93/93 返回名称；其中包含 61 条常见功能/立体分层样例，以及从完整模板记录按固定 SHA-256 排序抽出的 32 条复杂稠环、螺环和含杂原子骨架。`verify_native_iupac_differential.py` 已通过 OPSIN 2.9.0 回译和 RDKit 同分异构 SMILES比较确认 93/93 分子图等价，失败 0；
+- 已验证 Web typecheck、207 项 Web 测试、18 项 Apple IUPAC 测试，以及 Apple 全量 XCTest（115 + 95）和 Swift Testing（20）全部通过；
+- 完成度审计确认官方 NISPO 0.1.7 wheel 含 98,391 行（约 3.70MB）Python 规则逻辑和约 4.47MB 规则资源；当前 Swift 已接入全部已选可分发资源及主要图路由，但不能把资源打包或 93 条绿测等同于规则逻辑等价。下一唯一入口是按官方路由清单补齐缺失规则域并扩充分层覆盖报告；在此之前 Step 3 与统一发版继续保持未完成。
+
+### 2026-09-22 官方语料纠偏与 `acyclic-parent` 起始移植
+
+- 先前“93/93”只是项目自选冻结集的成功结果精确率，不能代表 NISPO 0.1.7 覆盖率；134,367 条模板也不能替代规则逻辑。以官方测试源码冻结的 1,296 个唯一结构重新审计后，当前为 1,296/1,296 可导入、24/1,296 返回名称、24/24 OPSIN 回译结构等价、1,272 个明确不支持，真实命名覆盖率为 1.85%；
+- 已禁止 `legacy-exact-graph-fallback` 作为命名成功路径。首轮安全收紧前的 98 个“成功”中仅 62 个能通过 OPSIN 等价；收紧后旧整图命中为 0，当前 24 个成功无回译失败；
+- 新增真正基于分子图的 `acyclic-parent` 子集：最长碳链枚举、等长母体比较、最低位次编号、递归支链命名、重复前缀和字母序组合，不读取整分子模板；目前覆盖中性、无同位素/自由基/立体标记的无环碳氢骨架及其双/三键，官能团和杂原子母体仍未纳入，因此在 123 个官方规则族清单中仍标记为 `partial`，不能标记为已实现；
+- `acyclic-parent` 碳氢化合物子域随后扩展到双键、三键、二烯、二炔和烯炔：母体候选先最大化所含多键数，再比较链长、最低多键位次、烯键优先位次和取代基位次。系统枚举得到 598 个最多 8 碳的非同构结构，Swift 为 598/598 命名，全部归属 `acyclic-parent`，598/598 经 OPSIN 回译与 RDKit 规范图比较等价，整图兜底为 0；
+- 饱和醇子域已加入主官能团优先级：先最大化母链所含羟基数量，再比较最低羟基位次、链长和支链位次。系统枚举得到 711 个最多 8 碳的一元醇/二元醇，Swift 为 711/711 命名，全部归属 `acyclic-parent`，711/711 OPSIN 回译等价，整图兜底为 0；两层系统枚举共 1,309 个结构，但不能替代其余官能团、杂原子、环系、电荷、同位素和立体规则族；
+- `acyclic-parent` 又加入单醛/单酮、单羧酸和中性一级/二级/三级胺的主官能团母链及编号规则；系统枚举分别为 132/132、73/73、161/161、38/38 OPSIN 等价。羧酸规则保留额外羟基为 `hydroxy` 前缀，乳酸恢复为羧酸母体并保留 R/S 描述符；基础无环六层系统冻结集累计 1,713 个结构，全部命名且 OPSIN 等价，整图兜底为 0。该数字仍只代表已明确限定的无环子域；
+- `scripts/verify_nispo_native_completion.py` 是统一硬门禁：123 个规则族必须全部为 `implemented` 后才会继续执行 1,296 条官方语料的 `--require-full-coverage` OPSIN 差分。当前门禁预期失败并阻止发版；
+- 下一唯一入口是继续完成 `acyclic-parent` 的多键、主官能团优先级、杂原子置换和完整递归取代基规则，再按相同方法逐个官方规则族完成，而不是逐个分子增加分支。
 
 ## 6. 上游与标准参考
 
