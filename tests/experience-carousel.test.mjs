@@ -30,11 +30,17 @@ test("model copy distinguishes Apple and Web recognition models", () => {
   assert.doesNotMatch(script, /Model compute paths by product/);
 });
 
-test("Mac uses the App Store while iPhone and iPad remain coming soon", () => {
+test("Apple platforms share one App Store download", () => {
   const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   const script = readFileSync(new URL("../script.js", import.meta.url), "utf8");
 
-  assert.match(html, /href="https:\/\/apps\.apple\.com\/app\/wa-chem\/id6809643025"/);
-  assert.match(html, /iOS 与 iPadOS · 即将上架/);
+  const appStoreLinks = [...html.matchAll(/href="https:\/\/apps\.apple\.com\/app\/wa-chem\/id6809643025"/g)];
+  assert.equal(appStoreLinks.length, 1);
+  assert.match(html, /<strong>Apple App<\/strong>/);
+  assert.match(html, /iPhone · iPad · Mac · App Store/);
+  assert.doesNotMatch(html, /iPhone &amp; iPad|即将上架/);
+  assert.match(script, /Download the iPhone, iPad, and Mac app from the App Store/);
+  assert.match(script, /const label = release\.name \|\| release\.tag_name/);
+  assert.match(script, /element\.textContent = text\("latestVersion"\)\(label\)/);
   assert.doesNotMatch(script, /wa-chem-mac_\[\^\/\]\+_aarch64\\\.dmg/);
 });
