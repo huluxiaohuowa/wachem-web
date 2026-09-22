@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-09-21",
+  "components": [
+    {
+      "name": "NISPO",
+      "package": "nispo",
+      "version": "0.1.7",
+      "artifact": "nispo-0.1.7-py3-none-any.whl",
+      "sha256": "46b4116c52abe349ac3aa42a25a46d7c2446af9f785dcea67ad580341bc19119",
+      "license": "BSD-3-Clause",
+      "source": "https://github.com/oxpig/nispo"
+    },
+    {
+      "name": "OPSIN Python wrapper",
+      "package": "py2opsin",
+      "version": "1.2.0",
+      "artifact": "py2opsin-1.2.0-py3-none-any.whl",
+      "sha256": "56c925f211b6a90979da2c322bbf70edbe0d33a9b977ec8a12747c06847bd2e9",
+      "license": "MIT",
+      "bundles": "OPSIN 2.9.0",
+      "source": "https://github.com/JacksonBurns/py2opsin"
+    },
+    {
+      "name": "OPSIN",
+      "version": "2.9.0",
+      "license": "MIT",
+      "source": "https://github.com/dan2097/opsin"
+    }
+  ]
+}

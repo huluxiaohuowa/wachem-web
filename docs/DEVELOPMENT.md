@@ -53,8 +53,8 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 
 - 已完成：共享无头核心（schema v2）、Apple app 原生画布（Metal，CoreGraphics 后备绘制/导出）、完整导入导出（Mol/SDF/SMILES/CDXML/CDX 导入、RXN 导出、SVG/PNG/wachem）、ChemDraw 交互子集与绘图进阶项（原子标签就地编辑、价态校验/自由基、反应箭头/轨道/整理反应式、内置模板库、套索/旋转/缩放、SMILES 方向键与 E-Z 几何推导）、中英双语界面（Web 顶栏切换、Apple 跟随系统 per-app 语言）、图片识别统一入口与 Apple Pencil 草图识别、画布自适应缩放、iPad 双指导航手势优先仲裁、原生原子/键手势与 Web 语义对齐；
 - 资产与联动：本地 SDF 分子库多资产管理、WA-DD 项目浏览/载入与新建/追加/替换写入、iCloud 与 Keychain 策略（设置中可开关 iCloud 存储）、Mac Catalyst App Sandbox、VOS 应用包发布；
-- App Store 交付：统一交付链已跑通——发版 tag 自动归档上传 iPhone/iPad 与 Mac 构建到 TestFlight（分发 internal / external 测试组并写入 What's New，外部组按需 Beta App Review），`--submit-app-store` 继续提交正式审核，审核通过后自动发布；Mac 版已上架，iPhone/iPad 版等待审核；
-- 测试基线：Web 183 个（vitest，2026-09-09 实测全过）、Apple shared core 162 个 XCTest + 19 个 Swift Testing（同日全过），并用 `scripts/check_runtime_lines.py` 阻止旧桌面壳、旧网页桥、旧脚本桥和分裂 Apple 产品壳回流；
+- App Store 交付：统一交付链已跑通——发版 tag 自动归档上传 iPhone/iPad 与 Mac 构建到 TestFlight（分发 internal / external 测试组并写入 What's New，外部组按需 Beta App Review），`--submit-app-store` 继续提交正式审核，审核通过后自动发布；Mac 版已上架，iPhone/iPad 版首版已通过审核；
+- 测试基线：Web 204 个（vitest，2026-09-22 实测全过）、Apple shared core 198 个 XCTest + 20 个 Swift Testing（同日全过），并用 `scripts/check_runtime_lines.py` 阻止旧桌面壳、旧网页桥、旧脚本桥和分裂 Apple 产品壳回流；
 - 已发布：GitHub Releases 提供独立部署包与 VOS 应用包；Mac 版仅通过 App Store 发布；
 - 进行中：App Store 首版审核跟进、低置信度识别纠错叠加界面（按冻结集评测结果完善）。
 
