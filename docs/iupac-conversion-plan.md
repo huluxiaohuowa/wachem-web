@@ -1,6 +1,6 @@
 # WA Chem IUPAC 名称与结构双向转换实施计划
 
-状态：Phase 9 实施中；结构→名称优先扩展；0.1.76 已冻结并提交统一发版，NISPO 完成门禁仍未通过
+状态：Phase 9 实施中；结构→名称优先扩展；0.1.76 已冻结并提交统一发版，NISPO 完成门禁仍未通过（官方 231/1,296）
 最后更新：2026-09-23
 
 ## 1. 最终目标
@@ -70,7 +70,7 @@ structureToName(structure, options) -> StructureToNameResult
 - Step 0 进行中：已锁定 NISPO `0.1.7@929febd093f4c5069d4004d91d785948514aea15`、py2opsin 1.2.0/OPSIN 2.9.0 和许可证边界；除 93 条快速分层语料外，已从官方测试源码可复现地冻结 1,296 个唯一规范结构，后续覆盖率以该官方语料为最低基线；
 - Step 1 进行中：共享状态/候选/结构版本/回译合同已进入 API 与 Swift Core；完整规范化校验和及 InChI 基线尚未实现；
 - Step 2 进行中：API 已实现本地 NISPO→OPSIN 回译和 OPSIN→结构端点，x86_64 目标镜像已验证，完整冻结集仍待扩充；
-- Step 3 未完成：Apple 纯 Swift 已接入与官方同名的 `MoleculeFacts → RoutePlan → RuleSpec → Candidate` 通用执行骨架，并为每个结果记录实际规则族。第一次诚实审计发现原实现 98 个“成功”中仅 62 个 OPSIN 回译等价，随后已禁止旧精确图查表和未经支持的电荷、自由基、异常氢价、互变异构/指示氢状态冒充成功。官方 1,296 条基线当前 1,296 条均可导入、145 条返回名称，145/145 OPSIN 回译结构等价、129 条名称与 NISPO 完全一致、`legacy-exact-graph-fallback` 命中为 0；命名覆盖率为 11.19%，仍有 1,151 条未命名。123 个上游 `RuleSpec` 仍无一达到 `implemented`。母体候选排序、递归取代基、完整后缀、部分氢化环、互变异构/指示氢以及复杂电荷/硫磷硼规则尚未等价移植；后续必须按上游规则族和共享组装阶段推进，不能把小型系统语料的全绿当作本步骤接近完成；
+- Step 3 未完成：Apple 纯 Swift 已接入与官方同名的 `MoleculeFacts → RoutePlan → RuleSpec → Candidate` 通用执行骨架，并为每个结果记录实际规则族。第一次诚实审计发现原实现 98 个“成功”中仅 62 个 OPSIN 回译等价，随后已禁止旧精确图查表和未经支持的电荷、自由基、异常氢价、互变异构/指示氢状态冒充成功。官方 1,296 条基线当前 1,296 条均可导入、231 条返回名称，231/231 OPSIN 回译结构等价、208 条名称与 NISPO 完全一致、`legacy-exact-graph-fallback` 命中为 0；命名覆盖率为 17.82%，仍有 1,065 条未命名。123 个上游 `RuleSpec` 仍无一达到 `implemented`。123 个上游 `RuleSpec` 仍无一达到 `implemented`。母体候选排序、递归取代基、完整后缀、部分氢化环、互变异构/指示氢以及复杂电荷/硫磷硼规则尚未等价移植；后续必须按上游规则族和共享组装阶段推进，不能把小型系统语料的全绿当作本步骤接近完成；
 - Step 4 暂缓扩面：名称→结构维持 `organic-v3`，不再阻塞 Step 3 的结构命名覆盖，但不得据此宣称双向完成；
 - Step 5/6 进行中：27 条共享冻结向量中的 Apple 支持项全部双向往返通过；Web 和 Apple 已接产品入口，结构→名称只接受一个完整分子选区；右键/触摸长按后直接生成，不再弹出转换窗口；
 - NISPO 完整复现仍未达到发版门禁；继续开发须完成全量回归、新鲜 Apple 产物验证、目标镜像重建和发布验收后才能进入下一次统一发版。
@@ -309,6 +309,8 @@ structureToName(structure, options) -> StructureToNameResult
 - 2026-09-23：移植中性三价磷的配体组合流水线 `pnictogen-hydride-parent`：逐个配体解析并检查全图覆盖，统一处理碳基、苯基/苄基、饱和环胺、双烷基氨基、卤素和羟基，重复复合配体使用 `bis(...)`/`tris(...)`。官方该 producer 的 10 例中 8 例与 NISPO 文字一致且 OPSIN 图等价；另外 2 例的复杂芳香 N 配体及吲哚基未实现，状态仅从 `missing` 调整为 `partial`。它还覆盖 3 例上游由其他 producer 命名的结构，使官方整体达到 145/1,296 可命名、129 个逐字一致、145/145 OPSIN 等价。NISPO 对某些 P–OH 结构给出的 `hydroxymethyl...` 文本经 OPSIN 会错误地把 OH 接到甲基上；原生规则使用明确括号的安全名称，保留参考文本冲突，不降低回译门禁；
 - 2026-09-23：新增按完整图识别中心硫、末端 oxido/氧代/硫代配体及碳基的 `sulfinate-retained-parent` 原生规则，覆盖亚硫酸根、硫代亚硫酸根、磺酰硫代酸根及部分次磺酸根，不按整分子查表。官方冻结集由 145 增至 155/1,296 可命名、129 增至 139 个与 NISPO 文本逐字一致，155/155 OPSIN 回译等价且无新误命名。该族仍有亚甲基/二亚硫酸根、多硫中心和更复杂碳基未实现，状态仅为 `partial`；完整复现与发版退出条件仍未满足；
 - 2026-09-23：在 `charged-retained-parent` 中以完整 N⁺–O⁻ 配位图解析胺氧化物和羟胺氧化物，并冻结 110 个不同碳基/羟基组合的系统结构。110/110 原生名称均经 OPSIN 回译等价；78/110 与固定 NISPO 文本一致，其余使用显式 `N-` 配体位次避免上游紧连写法被 OPSIN 解成错误碳连接。官方全集由 155 增至 167/1,296 原生命名、149 个文字一致、167/167 回译等价。该规则族尚有酰胺/亚胺/硝酮/氧鎓等大量分支，状态仅为 `partial`；Step 3 和发版退出条件继续保持阻断；
+- 2026-09-23：以 NISPO 0.1.7 `parent_rules.py::_charged_retained_parent_names` 的 16 个子函数为蓝本，新增 `NativeNISPOChargedIonRules.swift`，照抄移植异腈（`_isocyanide_*`）、氧鎓、含环甲鎓、二/三氰基甲烷离子、硝酮/azaniumolate（`_nitrone_azaniumolate_*`）、酰胺氧化物（`_amide_oxide_*`）、羧酸氧/硫化物（`_carboxylic_acid_chalcogenide_*`）、有机二氮烯阴离子（`_organic_diazenide_*`）、双(azanidyl)链烷（`_bis_azanidyl_*`，带立体相关 C=C 安全拒绝）、阴离子氧/硫/氨基酰胺（`_anionic_amide_*`）、饱和环外亚胺 azanide（`_exocyclic_imine_azanide_*`）、N-取代甲亚胺氧化物（`_n_substituted_imine_oxide_*` 无立体子域）与醇氧化物（`_alcohol_oxide_*`）；共享前缀遵循上游 `_simple_or_branch_prefix`/`alkyl_to_alkoxy` 词形表。官方 1,296 例中 charged-retained 归因样本由 12 个命名增至 60 个、全部 OPSIN 等价；冻结 36 例系统异腈语料（36/36 命名、逐字一致且 OPSIN 等价）与 151 例带电氮氧语料（142/151 命名且逐字一致、138/142 OPSIN 等价、4 例为 NISPO 参考文本本身不可回译、9 例属其他 producer 域）。
+- 2026-09-23：新增 `NativeNISPOAcyclicIonRules.swift`，按 `acyclic/rules.py` 照抄移植无环离子后缀族：端位硝酮/azaniumolate（`_name_terminal_nitrone`）、azaniumdiolate（`_name_terminal_nitronate`）、环外亚胺 azanide（`_name_terminal_imine_azanide`）、氨基二氮烯阴离子（`_name_aminodiazenide`）、烷氧基 azanide（`_name_alkoxy_azanide`/`_name_dialkoxy_azanide`）、oxido 后缀醇盐母体（`_oxido_suffix_parent_name`/`_mono_oxido_suffix_parent`，含 `oxidomethyl` 分支与羧酸根排除门）、带 oxo/oxido 配体的端位碳离子与端位不饱和碳离子（"butenide" 型 locant 省略）。共享 `format_prefixes`/`join_prefix_parent` 连接与连字符省略规则按上游实现复刻。官方 1,296 例命名由 167 升至 231/1,296（231/231 OPSIN 回译等价，逐字一致 208），整图兜底保持 0；此前两个命名因羧酸根错域与 E/Z 配体缺立体描述被改为安全拒绝，未降低任何等价门禁。全部既有系统语料复测无退化（haloalkane 8220、substituted-carbocycle-polyene 6090、unequal-substituted-bicyclic 9175、spiro 7225 等数字保持），`swift test` 184 项全绿。
 - 下一入口按上游 producer 缺口推进 `single-ring-parent` 的多取代、杂环和电荷规则，同时继续 `acyclic-parent` 的官能团优先级与递归取代基；随后处理稠环等高缺口族。每一类须按规则和系统语料完成，不能逐个截图分子增加分支。
 
 ## 6. 上游与标准参考
