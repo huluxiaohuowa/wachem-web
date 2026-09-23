@@ -129,7 +129,7 @@ structureToName(structure, options) -> StructureToNameResult
 - `scripts/generate_nispo_acyclic_hydrocarbon_corpus.py <NISPO-0.1.7-checkout>` 系统枚举最多 8 个碳的全部非同构碳树以及最多两个合法双/三键组合；`--fixture acyclic --require-full-coverage` 是 `acyclic-parent` 碳氢化合物子域的独立门禁，防止官方测试文字抽取遗漏基础结构空间；
 - `scripts/generate_nispo_acyclic_alcohol_corpus.py <NISPO-0.1.7-checkout>` 在最多 8 碳的非同构饱和碳树上系统枚举一至两个羟基位置；`--fixture alcohol --require-full-coverage` 独立验证主官能团母链选择、编号和支链组合；
 - `scripts/generate_nispo_acyclic_carbonyl_corpus.py`、`scripts/generate_nispo_acyclic_carboxylic_acid_corpus.py` 和 `scripts/generate_nispo_acyclic_primary_amine_corpus.py` 分别系统枚举单醛/单酮、单羧酸和一级胺；对应 `carbonyl`、`acid`、`amine` fixture 均纳入最终完成门禁；
-- 最终门禁使用 `--require-full-coverage`。未达到 1,296/1,296 可导入、命名且 OPSIN 等价，或仍命中 `legacy-exact-graph-fallback`，均不得把 Step 3 标记为完成。
+- 最终门禁使用 `--require-full-coverage --require-exact-names`。未达到 1,296/1,296 可导入、命名、OPSIN 等价且名称文字与固定 NISPO 0.1.7 输出一致，或仍命中 `legacy-exact-graph-fallback`，均不得把 Step 3 标记为完成；所有新增系统语料也要通过相同门禁。只达到结构等价的子域须继续移植 NISPO 的母体取向、前缀顺序与官能团选名。
 
 退出条件：Apple 分层冻结集中“返回成功”的结果 100% 回译为等价分子图；对共同有机基准报告相对固定 NISPO 的覆盖率，禁止通过大量拒绝伪造准确率。“全支持”不作为声明，因为 IUPAC 有机、无机、聚合物等分别属于不同规则体系。
 
@@ -244,6 +244,7 @@ structureToName(structure, options) -> StructureToNameResult
 - `acyclic-parent` 碳氢化合物子域随后扩展到双键、三键、二烯、二炔和烯炔：母体候选先最大化所含多键数，再比较链长、最低多键位次、烯键优先位次和取代基位次。系统枚举得到 598 个最多 8 碳的非同构结构，Swift 为 598/598 命名，全部归属 `acyclic-parent`，598/598 经 OPSIN 回译与 RDKit 规范图比较等价，整图兜底为 0；
 - 饱和醇子域已加入主官能团优先级：先最大化母链所含羟基数量，再比较最低羟基位次、链长和支链位次。系统枚举得到 711 个最多 8 碳的一元醇/二元醇，Swift 为 711/711 命名，全部归属 `acyclic-parent`，711/711 OPSIN 回译等价，整图兜底为 0；两层系统枚举共 1,309 个结构，但不能替代其余官能团、杂原子、环系、电荷、同位素和立体规则族；
 - `acyclic-parent` 又加入单醛/单酮、单羧酸和中性一级/二级/三级胺的主官能团母链及编号规则；系统枚举分别为 132/132、73/73、161/161、38/38 OPSIN 等价。羧酸规则保留额外羟基为 `hydroxy` 前缀，乳酸恢复为羧酸母体并保留 R/S 描述符；随后加入无环饱和单腈/二腈的 `cyano` 前缀、母链编号和递归支链规则，覆盖氢氰酸以及腈基位于支链的情况，712/712 OPSIN 回译等价；无环饱和醚/硫醚按 `oxa`/`thia` 置换规则实现最长母链、最低位次、混合杂原子和递归碳支链，系统生成 843 个结构并达到 843/843 OPSIN 回译等价；无环饱和卤代烷实现 F/Cl/Br/I 的母链与递归支链前缀，系统生成 8,220 个一卤/二卤结构并达到 8,220/8,220 OPSIN 回译等价。基础无环九层系统冻结集累计 11,488 个结构，全部命名且 OPSIN 等价，整图兜底为 0。该数字仍只代表已明确限定的无环子域；
+- 2026-09-23：沿同一母链候选管线加入无环 O/S/N 置换骨架与一个羰基的组合，覆盖酯、硫代酯及部分酰胺的通用图结构。系统枚举最多 8 碳的 2,028 个结构，原生 2,028/2,028 命名并经 OPSIN 回译等价；其中 602 个名称文字与 NISPO 0.1.7 完全一致。其余名称的结构虽等价，但 NISPO 的 `formyl`、酰胺后缀与母体选择尚未复现；这仍是 `acyclic-parent` 的未完成项。十层无环冻结集累计 13,516 个结构，不能用此数字代替 123 规则族或官方 1,296 条的完成率；
 - `scripts/verify_nispo_native_completion.py` 是统一硬门禁：123 个规则族必须全部为 `implemented` 后才会继续执行 1,296 条官方语料的 `--require-full-coverage` OPSIN 差分。当前门禁预期失败并阻止发版；
 - 下一唯一入口是继续完成 `acyclic-parent` 尚未覆盖的主官能团优先级、含多键杂原子母链和完整递归取代基规则，再按相同方法逐个官方规则族完成，而不是逐个分子增加分支。
 
