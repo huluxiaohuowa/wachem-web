@@ -70,7 +70,7 @@ structureToName(structure, options) -> StructureToNameResult
 - Step 0 进行中：已锁定 NISPO `0.1.7@929febd093f4c5069d4004d91d785948514aea15`、py2opsin 1.2.0/OPSIN 2.9.0 和许可证边界；除 93 条快速分层语料外，已从官方测试源码可复现地冻结 1,296 个唯一规范结构，后续覆盖率以该官方语料为最低基线；
 - Step 1 进行中：共享状态/候选/结构版本/回译合同已进入 API 与 Swift Core；完整规范化校验和及 InChI 基线尚未实现；
 - Step 2 进行中：API 已实现本地 NISPO→OPSIN 回译和 OPSIN→结构端点，x86_64 目标镜像已验证，完整冻结集仍待扩充；
-- Step 3 未完成：Apple 纯 Swift 已接入与官方同名的 `MoleculeFacts → RoutePlan → RuleSpec → Candidate` 通用执行骨架，并为每个结果记录实际规则族。第一次诚实审计发现原实现 98 个“成功”中仅 62 个 OPSIN 回译等价，随后已禁止旧精确图查表和未经支持的电荷、自由基、异常氢价、互变异构/指示氢状态冒充成功。官方 1,296 条基线当前 1,296 条均可导入、32 条返回名称，32/32 OPSIN 回译结构等价、24 条名称与 NISPO 完全一致、`legacy-exact-graph-fallback` 命中为 0；命名覆盖率仍仅 2.47%。按上游实际命中规则归因，最大缺口依次包括 `single-ring-parent`（208 例，仅 10 例原生命名）、`kekulized-generic-polycyclic-parent`（137 例，0 例）和 `generated-fused-parent`（94 例，0 例）。母体候选排序、递归取代基、完整后缀、部分氢化环、互变异构/指示氢以及复杂电荷/硫磷硼规则尚未等价移植，因此本步骤距离退出条件仍很远；
+- Step 3 未完成：Apple 纯 Swift 已接入与官方同名的 `MoleculeFacts → RoutePlan → RuleSpec → Candidate` 通用执行骨架，并为每个结果记录实际规则族。第一次诚实审计发现原实现 98 个“成功”中仅 62 个 OPSIN 回译等价，随后已禁止旧精确图查表和未经支持的电荷、自由基、异常氢价、互变异构/指示氢状态冒充成功。官方 1,296 条基线当前 1,296 条均可导入、34 条返回名称，34/34 OPSIN 回译结构等价、26 条名称与 NISPO 完全一致、`legacy-exact-graph-fallback` 命中为 0；命名覆盖率仍仅 2.62%。按上游实际命中规则归因，最大缺口依次包括 `single-ring-parent`（208 例，仅 12 例原生命名）、`kekulized-generic-polycyclic-parent`（137 例，0 例）和 `generated-fused-parent`（94 例，0 例）。母体候选排序、递归取代基、完整后缀、部分氢化环、互变异构/指示氢以及复杂电荷/硫磷硼规则尚未等价移植，因此本步骤距离退出条件仍很远；
 - Step 4 暂缓扩面：名称→结构维持 `organic-v3`，不再阻塞 Step 3 的结构命名覆盖，但不得据此宣称双向完成；
 - Step 5/6 进行中：27 条共享冻结向量中的 Apple 支持项全部双向往返通过；Web 和 Apple 已接产品入口，结构→名称只接受一个完整分子选区；右键/触摸长按后直接生成，不再弹出转换窗口；
 - NISPO 完整复现仍未达到发版门禁；继续开发须完成全量回归、新鲜 Apple 产物验证、目标镜像重建和发布验收后才能进入下一次统一发版。
@@ -128,6 +128,7 @@ structureToName(structure, options) -> StructureToNameResult
 - `scripts/generate_nispo_upstream_rule_attribution.py <NISPO-0.1.7-checkout>` 固定官方 1,296 例各自实际命中的 producer 规则族；`--fixture upstream` 按原规则族报告最大缺口，避免以样本类别代替上游行为归因；
 - `scripts/generate_nispo_single_ring_carbonyl_corpus.py <NISPO-0.1.7-checkout>` 穷举 3–10 元碳环中带一个环外羰基、最多三个合法环内双键的 144 个非同构结构；`--fixture ring-carbonyl --require-full-coverage --require-exact-names` 验证单环羰基子域，并不代表整个 `single-ring-parent` 已完成；
 - `scripts/generate_nispo_single_ring_heterocycle_corpus.py <NISPO-0.1.7-checkout>` 穷举 3–8 元、至多两个 O/N/S 杂原子与两个环内双键的 1,305 个非同构单环骨架；`--fixture ring-heterocycle` 当前有 1,303 个精确名称且 OPSIN 回译等价，两个参考名称本身回译不等价的芳香 N-H 四元环被安全拒绝，不能把 1,305 个仅文字一致冒充化学正确；
+- `scripts/generate_nispo_single_ring_substituent_corpus.py <NISPO-0.1.7-checkout>` 枚举 3–8 元碳环、零或一个环内双键及一至两个端点 C/F/Cl/O/N 取代原子的 1,690 个非同构结构；`--fixture ring-substituent --require-full-coverage --require-exact-names` 检查共享环编号、前缀分组、母体组装和 OPSIN 回译，当前 1,690 个全部命名、名称文字一致且化学等价；这只是单环取代规则的已验证子域，不代表任意支链、杂环、立体化学已完成；
 - `scripts/verify_native_iupac_differential.py --fixture upstream` 对每个原生成功结果执行 OPSIN 回译和规范分子图比较，并分别报告导入、命名、规则族、旧精确图兜底和等价数量；
 - `scripts/generate_nispo_acyclic_hydrocarbon_corpus.py <NISPO-0.1.7-checkout>` 系统枚举最多 8 个碳的全部非同构碳树以及最多两个合法双/三键组合；`--fixture acyclic --require-full-coverage` 是 `acyclic-parent` 碳氢化合物子域的独立门禁，防止官方测试文字抽取遗漏基础结构空间；
 - `scripts/generate_nispo_acyclic_alcohol_corpus.py <NISPO-0.1.7-checkout>` 在最多 8 碳的非同构饱和碳树上系统枚举一至两个羟基位置；`--fixture alcohol --require-full-coverage` 独立验证主官能团母链选择、编号和支链组合；
@@ -250,6 +251,7 @@ structureToName(structure, options) -> StructureToNameResult
 - 2026-09-23：沿同一母链候选管线加入无环 O/S/N 置换骨架与一个羰基的组合，覆盖酯、硫代酯及部分酰胺的通用图结构。系统枚举最多 8 碳的 2,028 个结构，原生 2,028/2,028 命名并经 OPSIN 回译等价；其中 602 个名称文字与 NISPO 0.1.7 完全一致。其余名称的结构虽等价，但 NISPO 的 `formyl`、酰胺后缀与母体选择尚未复现；这仍是 `acyclic-parent` 的未完成项。十层无环冻结集累计 13,516 个结构，不能用此数字代替 123 规则族或官方 1,296 条的完成率；
 - 2026-09-23：为官方 1,296 例冻结实际命中的 NISPO producer 归因，按规则族而非截图结构追踪缺口。新增 3–10 元单环羰基及至多三个环内双键的通用命名和 144 个非同构冻结结构，144/144 原生命名、名称文字与 NISPO 完全一致且 OPSIN 回译等价；官方基线相应为 25/1,296 原生命名、17 个精确名称。`single-ring-parent` 只标为 `partial`，剩余多取代、杂环、电荷和立体规则并未完成；
 - 2026-09-23：按上游环母体候选、骨架杂原子置换、保留环名、部分氢化母体与 lambda 价态逻辑补全单环无取代骨架通用路径；1,305 个系统生成杂环中 1,303 个名称与 NISPO 完全一致且 OPSIN 回译等价，其余两个 4 元芳香 N-H 环的 NISPO 原文无法通过 OPSIN 等价（其中一个连分子式不同），原生安全拒绝。官方基线更新为 32/1,296 原生命名、24 个精确名称，32/32 回译等价；`single-ring-parent` 仍为 `partial`，母体外部取代、带电及立体化学尚缺。最终门禁尚未因参考冲突而降低，必须先解决这两个参考不一致样本的产品与验收语义；
+- 2026-09-23：单环母体外接端点取代基改为按图枚举双向环编号、比较取代位次、分组前缀并组装名称，不按分子 SMILES 特判。3–8 元碳环、零或一个环内双键、一至两个 C/F/Cl/O/N 端点取代基的 1,690 个系统结构全部与 NISPO 名称文字一致且 OPSIN 回译等价；官方基线增至 34/1,296 原生命名、26 个精确名称，34/34 回译等价。复杂支链、杂环取代、官能团后缀、电荷及立体取向仍未完成；
 - `scripts/verify_nispo_native_completion.py` 是统一硬门禁：123 个规则族必须全部为 `implemented` 后才会执行官方及各系统语料的全量命名、精确名称与 OPSIN 等价差分。当前 121 个 `missing`、2 个 `partial`，门禁预期失败并阻止发版；
 - 下一入口按上游 producer 缺口推进 `single-ring-parent` 的多取代、杂环和电荷规则，同时继续 `acyclic-parent` 的官能团优先级与递归取代基；随后处理稠环等高缺口族。每一类须按规则和系统语料完成，不能逐个截图分子增加分支。
 
