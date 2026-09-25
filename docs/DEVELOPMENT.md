@@ -66,7 +66,7 @@ Web 服务器版与 Apple app 必须保持功能同步：绘图、识别、格�
 - `wa-chem_deploy_<version>.tar.gz`：独立部署包；
 - `SHA256SUMS`：产物校验和。
 
-推送 `vX.Y.Z` tag 触发 Release workflow 自动构建并发布 Web/VOS 产物，同时将同一 Apple target 的 iPhone/iPad 与 Mac Catalyst 构建上传到 App Store Connect/TestFlight：构建会分发到 internal（`WA Chem Internal`）与 external（`WA Chem Beta Testers`）测试组并写入本地化 What's New；外部组构建按 App Store Connect 配置进入 Beta App Review；单个平台上传失败可在 workflow 中单独重试。`./update_version.sh patch --submit-app-store` 会在 tag 消息中写入 `App-Store-Submit: true` 标记，上传成功后继续将 iOS 和 macOS 版本提交正式审核，并在审核通过后自动发布；提审的 What's New 由 `scripts/prepare_apple_release_notes.py` 从上一个成功提审版本以来的全部提交自动生成；不带该选项时只上传、不提审。Mac 版仅通过 App Store 发布，不再生成或上传 DMG。
+`./update_version.sh` 在本地构建并上传同一 Apple target 的 iPhone/iPad 与 Mac Catalyst 构建到 TestFlight，分发到 internal（`WA Chem Internal`）与 external（`WA Chem Beta Testers`）测试组；外部组按 App Store Connect 配置进入 Beta App Review。随后推送 `vX.Y.Z` tag，由 Linux Release workflow 发布 Web/VOS 产物。`./update_version.sh patch --submit-app-store` 还会在本地将 iOS 和 macOS 版本提交正式审核，并在审核通过后自动发布。提审的 What's New 由 `scripts/prepare_apple_release_notes.py` 分别从各平台上一个已上架版本汇总到本次版本，包含中间所有 TestFlight 版本的更新；Promotional Text 每次自动填写 `release/app-store-promotional-text.json` 中固定的中英文产品介绍。不带送审选项时只上传 TestFlight、不提审。文案范围、覆盖规则及预览方法见 [本地 Apple 发布说明](local-apple-release.md#app-store-update-text)。Mac 版仅通过 App Store 发布，不再生成或上传 DMG。
 
 ## 部署要点
 
