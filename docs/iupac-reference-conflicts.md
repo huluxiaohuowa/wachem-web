@@ -60,3 +60,6 @@ native 侧未发现可修复缺陷的，标记为冲突保留；产品不得为�
 - bicyclic-polyene 同类：桥烯二烯/三烯引用名（`bicyclo[3.2.2]nona-1(9),5(6)-diene` 等
   188 例）native 与 NISPO 逐字一致，py2opsin 返回空（不解析），归因 OPSIN 解析局限。
   bicyclic-topology 4 例同类。
+- phosphonate-双键类 2 例（`COC(=O)/C(=C\C(=O)O)C(O)P(=O)(O)O` 等）：native 候选合法但
+  与上游选择不同 parent，参考文本 py2opsin 返回空（不解析）——无法判定 native 错误，
+  归因 OPSIN 解析局限 + 候选排序未定域，维持冲突记录。
