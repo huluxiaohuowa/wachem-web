@@ -57,3 +57,6 @@ native 侧未发现可修复缺陷的，标记为冲突保留；产品不得为�
   涉及 substituted-bicyclic（约 130 例）、unequal-substituted-bicyclic（约 450 例）、
   bicyclic-topology（4 例）。归因：OPSIN 解析局限；native 侧不改动。
 - 这些语料的差分退出码 1 属预期；exact parity 仍是有效指标。
+- bicyclic-polyene 同类：桥烯二烯/三烯引用名（`bicyclo[3.2.2]nona-1(9),5(6)-diene` 等
+  188 例）native 与 NISPO 逐字一致，py2opsin 返回空（不解析），归因 OPSIN 解析局限。
+  bicyclic-topology 4 例同类。
