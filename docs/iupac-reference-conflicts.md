@@ -47,3 +47,13 @@ native 侧未发现可修复缺陷的，标记为冲突保留；产品不得为�
 - 新发现冲突先独立复现参考回译（固定 py2opsin 版本），再入账；不凭单次运行记档。
 - 原生文本 ≠ 参考文本的失败不属于本台账，属于原生缺陷，须修复或安全拒绝。
 - 台账冲突默认保留门禁失败；未经用户确认不得豁免、缩分母或改验收口径。
+
+
+## 6. 桥头烯/杂环桥名称的 OPSIN 回译局限（2026-09-25）
+
+- 桥头双键命名（`bicyclo[3.3.2]dec-1(10)-ene` 等）与桥头杂原子名称
+  （`9-methyl-6-azabicyclo[3.2.2]nonane` 等）：native 与 NISPO 冻结文本逐字一致，
+  但 py2opsin 对该类桥环引文位次/桥头杂环解析能力不足，回译图与输入不符或为空。
+  涉及 substituted-bicyclic（约 130 例）、unequal-substituted-bicyclic（约 450 例）、
+  bicyclic-topology（4 例）。归因：OPSIN 解析局限；native 侧不改动。
+- 这些语料的差分退出码 1 属预期；exact parity 仍是有效指标。
