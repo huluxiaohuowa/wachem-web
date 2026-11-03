@@ -4,7 +4,7 @@
   <img src="docs/assets/wa-chem-logo.png" alt="WA Chem logo" width="180">
 </p>
 
-**WA Chem** 专注做好一件事：把画二维化学结构做到像 ChemDraw 一样快速、顺手。它是一个轻量的本地工作台，开箱即用、数据留在本地，并可接入 [WA-DD](https://wa-dd.fuluwa.top) 进行配体结构编辑管理。
+**WA Chem** 专注做好一件事：把画二维化学结构做到像 ChemDraw 一样快速、顺手。它是一个轻量的本地工作台，开箱即用、数据留在本地，并可接入 WA-DD 进行配体结构编辑管理。
 
 ### 从绘制、识别到资产管理
 
@@ -42,7 +42,7 @@ WA Chem 在 iPhone、iPad 与 Mac 上使用同一套原生 Apple 应用、共享
 ### 数据与联动
 
 - 独立账号体系与访客临时使用，文档按用户隔离存储；
-- 连接 [WA-DD](https://wa-dd.fuluwa.top) 后可浏览项目中的配体资产与分子，一键载入画布继续编辑；也可将当前分子新建为配体资产、追加到现有资产或替换其中分子；支持同一 Docker 网络自动发现或手动输入地址；
+- 连接 WA-DD 后可浏览项目中的配体资产与分子，一键载入画布继续编辑；也可将当前分子新建为配体资产、追加到现有资产或替换其中分子；支持同一 Docker 网络自动发现或手动输入地址；
 - 本地 SDF 分子库：常用分子随手保存、跨文档复用，支持多资产管理与 SDF 导出；
 - 完整的导入导出：Molfile、SDF、SMILES、CDXML（ChemDraw 交换格式）与 CDX（ChemDraw 二进制最小子集）导入，Molfile、SDF、SMILES、CDXML、RXN（反应式，按箭头分区反应物/产物）导出，SVG / PNG 图像导出，自有 `.wachem` 文档格式完整保留编辑状态，并在 Apple app 中注册为系统文档类型；导入自动识别格式；
 - 界面文案中英双语：Web 顶栏一键切换，Apple app 跟随系统 per-app 语言设置。
