@@ -86,7 +86,10 @@ silently truncated.
 Promotional Text is intentionally stable across releases. Every submission
 automatically fills both platforms from `release/app-store-promotional-text.json`.
 Edit its `en-US` and `zh-Hans` values when the product positioning changes; each
-must contain 1–170 characters. This uses fastlane's localized `release_notes.txt`
+must contain 1–170 characters. Localized subtitles are maintained separately in
+`release/app-store-subtitles.json` (1–30 characters per language), and every
+submission includes `subtitle.txt` for both platforms. Preserve the Chinese
+subtitle when correcting the English localization. This uses fastlane's localized `release_notes.txt`
 and `promotional_text.txt` metadata files. See the
 [Apple field definitions](https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information)
 and [fastlane metadata format](https://docs.fastlane.tools/actions/deliver/).
