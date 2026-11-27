@@ -1,0 +1,41 @@
+main:
+  push:
+    - name: Deploy to EdgeOne Makers
+      stages:
+        - name: Notify Makers
+          image: cnbcool/webhook
+          settings:
+            urls:
+              - https://api.edgeone.ai/eo/pages/hook/cnb
+            method: POST
+            content_type: application/json
+            template: |
+              {
+                "repoName": "{{ CNB_REPO_NAME }}",
+                "repoUrl": "{{ CNB_REPO_URL_HTTPS }}",
+                "branch": "{{ CNB_BRANCH }}",
+                "commit": "{{ CNB_COMMIT_SHORT }}",
+                "event": "{{ CNB_EVENT }}",
+                "buildId": "{{ CNB_BUILD_ID }}",
+                "buildWebUrl": "{{ CNB_BUILD_WEB_URL }}",
+                "pipelineName": "{{ CNB_PIPELINE_NAME }}"
+              }
+  "crontab: */15 * * * *":
+    - name: Sync GitHub Pages
+      git:
+        enable: false
+      stages:
+        - name: Fast-forward the CNB publishing branch
+          script: |
+            set -eu
+            ref=refs/heads/main
+            github_url="https://github.com/${CNB_REPO_SLUG}.git"
+            github_head=$(git ls-remote --exit-code "$github_url" "$ref" | cut -f1)
+            cnb_head=$(git ls-remote --exit-code "$CNB_REPO_URL_HTTPS" "$ref" | cut -f1)
+            test -n "$github_head" && test -n "$cnb_head"
+            if [ "$github_head" = "$cnb_head" ]; then
+              exit 0
+            fi
+            git init -q
+            git fetch --no-tags "$github_url" "$ref"
+            git -c credential.helper=               -c 'credential.helper=!f() { if [ "$1" = get ]; then printf "username=cnb\npassword=%s\n" "$CNB_TOKEN"; fi; }; f'               push "$CNB_REPO_URL_HTTPS" "FETCH_HEAD:$ref"
